@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#3C443C"
     tools:context=".MainActivity">
 
     <ImageView
@@ -13,10 +13,15 @@
         android:maxHeight="42dp" android:maxWidth="42dp" android:scaleType="fitXY" />
 
     <Button
-        android:id="@+id/btnSnap" android:onClick="takePicture" android:text="snap"
-        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:id="@+id/btnSnap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="11dp" />
+        android:layout_marginBottom="21dp"
+        android:layout_centerHorizontal="true"
+        android:onClick="takePicture"
+        android:text="snap"
+        android:textStyle="bold"/>
 
 
 </RelativeLayout>

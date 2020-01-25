@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //
-    public void takePicture(View v) {
+    public void takePhotoClick(View v) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             File photoFile = null;
@@ -52,6 +52,18 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
             }
         }
+    }
+
+    public void searchPhotoClick (View v) {
+
+    }
+
+    public void viewPhotoClick (View v) {
+
+    }
+
+    public void unspecifiedClick (View v) {
+
     }
 
     //

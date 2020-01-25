@@ -18,8 +18,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
-// Comment by Tristan TODO remove
-// Comment by Rabby Mir 
+// Comment by Tristan
+// Comment by Rabby Mir
+
+// TODO erere r
 
 
 public class MainActivity extends AppCompatActivity {
@@ -56,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
+        String imageFileName = "JPEG_" + timeStamp + "_"; // add time stamp to file name
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(imageFileName, ".jpg",storageDir);
         mCurrentPhotoPath = image.getAbsolutePath();

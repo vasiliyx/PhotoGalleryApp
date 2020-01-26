@@ -31,7 +31,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void takePicture(View v) {
+
+    public void takePhotoClick(View v) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             File photoFile = null;
@@ -50,10 +51,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Creates an image file on the file system
-    private File createImageFile() throws IOException {
+    public void searchPhotoClick (View v) {
+        Intent intent = new Intent(this, ViewPhotoActivity.class);
+        startActivity(intent);
+
+    }
+
+    public void  scrollPhotoLeft(View v) {
+
+
+    }
+
+    public void scrollPhotoRight (View v) {
+
+    }
+
+    //
+    public File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
+        String imageFileName = "JPEG_" + timeStamp + "_"; // add time stamp to file name
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(imageFileName, ".jpg",storageDir);
         mCurrentPhotoPath = image.getAbsolutePath();

@@ -24,16 +24,36 @@
         android:maxHeight="42dp" android:maxWidth="42dp" android:scaleType="fitXY"
         android:contentDescription="@string/todo" />
 
+    <EditText
+        android:id="@+id/captionEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:layout_alignStart="@id/takePhotoButton"
+        android:layout_alignLeft="@id/takePhotoButton"
+        android:layout_alignEnd="@id/viewPhotoButton"
+        android:layout_alignRight="@id/viewPhotoButton"
+        android:layout_below="@id/ivGallery"
+        android:layout_marginTop="40dp"
+        android:inputType="textCapSentences"
+        android:textSize="18sp"
+        android:textStyle="italic"
+        android:textColor="#000"
+        android:hint="Enter a caption for your photo."
+        android:gravity="center"
+        android:textColorHint="#333"
+        android:background="@drawable/et_rounded_style"/>
+
     <Button
         android:id="@+id/takePhotoButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/ivGallery"
+        android:layout_below="@id/captionEditText"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_marginStart="50dp"
         android:layout_marginLeft="50dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="5dp"
         android:onClick="takePhotoClick"
         android:text="@string/snap"
         android:textStyle="bold" />
@@ -44,7 +64,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/takePhotoButton"
         android:layout_alignLeft="@id/takePhotoButton"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="25dp"
         android:onClick="searchPhotoClick"
         android:text="Search"
         android:textStyle="bold"/>
@@ -73,7 +93,28 @@
         android:text="TBD"
         android:textStyle="bold" />
 
+    <Button
+        android:id="@+id/leftButton"
+        android:layout_width="150dp"
+        android:layout_height="100dp"
+        android:layout_below="@id/searchPhotoButton"
+        android:layout_alignStart="@id/searchPhotoButton"
+        android:layout_alignLeft="@id/searchPhotoButton"
+        android:layout_marginTop="15dp"
+        android:onClick="scrollPhotoLeftClick"
+        android:text="left"
+        android:textStyle="bold" />
 
+    <Button
+        android:id="@+id/rightButton"
+        android:layout_width="150dp"
+        android:layout_height="100dp"
+        android:layout_alignTop="@id/leftButton"
+        android:layout_alignEnd="@id/viewPhotoButton"
+        android:layout_alignRight="@id/viewPhotoButton"
+        android:onClick="scrollPhotoRightClick"
+        android:text="right"
+        android:textStyle="bold" />
 
 
 

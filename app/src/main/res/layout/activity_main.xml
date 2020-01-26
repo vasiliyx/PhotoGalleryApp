@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#3C443C"
+    android:background="#222"
     tools:context=".MainActivity">
 
     <androidx.appcompat.widget.Toolbar
@@ -42,7 +42,7 @@
         android:layout_alignEnd="@id/viewPhotoButton"
         android:layout_alignRight="@id/viewPhotoButton"
         android:layout_below="@id/ivGallery"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="20dp"
         android:inputType="textCapSentences"
         android:textSize="18sp"
         android:textStyle="italic"
@@ -62,7 +62,7 @@
         android:layout_alignParentLeft="true"
         android:layout_marginStart="50dp"
         android:layout_marginLeft="50dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="15dp"
         android:onClick="takePhotoClick"
         android:text="@string/snap"
         android:textStyle="bold"
@@ -75,7 +75,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/takePhotoButton"
         android:layout_alignLeft="@id/takePhotoButton"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="15dp"
         android:onClick="searchPhotoClick"
         android:text="Search"
         android:textStyle="bold"
@@ -127,7 +127,6 @@
         android:onClick="scrollPhotoRightClick" />
 
  />
-
 
 
 </RelativeLayout>

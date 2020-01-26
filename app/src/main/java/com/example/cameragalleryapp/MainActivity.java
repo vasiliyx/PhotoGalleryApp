@@ -19,24 +19,24 @@ import java.util.Date;
 import android.widget.EditText;
 
 
-// Comment by Tristan
-// Comment by Rabby Mir
-
-// TODO erere r
-
 
 public class MainActivity extends AppCompatActivity {
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
     String mCurrentPhotoPath;
 
+    static int imageCount = 0; // create an init the count to zero unless there already exists an image with higher number
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        initImageCount(); // Determine the image count
     }
 
-    //
+
+
     public void takePhotoClick(View v) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // Creates an image file on the file system
     public void searchPhotoClick (View v) {
         Intent intent = new Intent(this, ViewPhotoActivity.class);
         startActivity(intent);
@@ -70,11 +71,13 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    //
+    // This will create an image file as well as the caption file
     public File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_"; // add time stamp to file name
+        String imageCount_str = intToString(imageCount);
+
+        String imageFileName = "IMG" + imageCount_str + "_" +  timeStamp + "_"; // add time stamp to file name
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(imageFileName, ".jpg",storageDir);
         mCurrentPhotoPath = image.getAbsolutePath();
@@ -90,4 +93,33 @@ public class MainActivity extends AppCompatActivity {
             mImageView.setImageBitmap(BitmapFactory.decodeFile(mCurrentPhotoPath)); //JPEG to BITMAP (bit map has intensity at each pixel)
         }
     }
+
+
+
+    // Convert the image count into a string with fixed length
+    // VB
+    static private String intToString(int number) {
+        int stringLengthDesired = 5; // number of characters in the string
+
+        String number_str = Integer.toString(number);
+        int numberOfZeros = stringLengthDesired - number_str.length();
+
+        // Add zeros in front of the number to match the desired length of string
+        for (int i = 0; i<numberOfZeros; i++) {
+            number_str = "0" + number_str;
+        }
+
+        return number_str;
+    }
+
+    // Upon startup, determine the image count
+    // VB
+    static private void initImageCount() {
+        // TODO: Read from the memory to establish such relationship
+        imageCount = 0;
+    }
+
+
+
+
 }

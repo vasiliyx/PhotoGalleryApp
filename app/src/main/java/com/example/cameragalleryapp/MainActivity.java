@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -22,7 +23,10 @@ import java.util.Date;
 public class MainActivity extends AppCompatActivity {
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
-    String mCurrentPhotoPath;
+    static String myCurrentPhotoPath; // this will be updated every time a new image is taken
+    static String myCurrentCaptionPath; // this will be updated every time a new image is taken
+    static String myStoragePath; // this will remain the same through the program
+
 
     static int imageCount = 0; // create an init the count to zero unless there already exists an image with higher number
 
@@ -72,14 +76,25 @@ public class MainActivity extends AppCompatActivity {
 
     // This will create an image file as well as the caption file
     public File createImageFile() throws IOException {
+
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageCount_str = intToString(imageCount);
-
         String imageFileName = "IMG" + imageCount_str + "_" +  timeStamp + "_"; // add time stamp to file name
+
+        // Get storage path
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+
+        // Create a blank image and caption file on the file system
         File image = File.createTempFile(imageFileName, ".jpg",storageDir);
-        mCurrentPhotoPath = image.getAbsolutePath();
+        File text = File.createTempFile(imageFileName, ".caption", storageDir);
+
+        // Update the system variables
+        myCurrentPhotoPath = image.getAbsolutePath(); // Update the image path
+        myCurrentCaptionPath = image.getAbsolutePath(); // Update the caption path
+        myStoragePath = storageDir.getAbsolutePath();
+
+
         return image;
     }
 
@@ -89,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             ImageView mImageView = (ImageView) findViewById(R.id.ivGallery); //grab handle
-            mImageView.setImageBitmap(BitmapFactory.decodeFile(mCurrentPhotoPath)); //JPEG to BITMAP (bit map has intensity at each pixel)
+            mImageView.setImageBitmap(BitmapFactory.decodeFile(myCurrentPhotoPath)); //JPEG to BITMAP (bit map has intensity at each pixel)
         }
     }
 

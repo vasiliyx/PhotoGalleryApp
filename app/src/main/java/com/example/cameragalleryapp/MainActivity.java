@@ -55,19 +55,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void searchPhotoClick (View v) {
+        Intent intent = new Intent(this, ViewPhotoActivity.class);
+        startActivity(intent);
 
     }
 
-    public void viewPhotoClick (View v) {
+    public void  scrollPhotoLeft(View v) {
+
 
     }
 
-    public void unspecifiedClick (View v) {
+    public void scrollPhotoRight (View v) {
 
     }
 
     //
-    private File createImageFile() throws IOException {
+    public File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_"; // add time stamp to file name

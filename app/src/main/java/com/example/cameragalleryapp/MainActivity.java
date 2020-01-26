@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import android.widget.EditText;
 
 
 
@@ -65,12 +66,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void scrollPhotoLeft(View v) {
+    public void scrollPhotoLeftClick(View v) {
 
 
     }
 
-    public void scrollPhotoRight (View v) {
+    public void scrollPhotoRightClick (View v) {
 
     }
 

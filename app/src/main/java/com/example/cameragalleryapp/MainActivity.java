@@ -18,9 +18,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
-// Comment by Tristan TODO remove
-// Comment by Rabby Mir 
-
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
-    //
+
     public void takePicture(View v) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
@@ -52,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    //
+    // Creates an image file on the file system
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());

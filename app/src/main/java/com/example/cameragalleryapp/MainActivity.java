@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void  scrollPhotoLeft(View v) {
+    public void scrollPhotoLeft(View v) {
 
 
     }

@@ -28,20 +28,23 @@
         android:id="@+id/takePhotoButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="500dp"
+        android:layout_below="@id/ivGallery"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="50dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="100dp"
         android:onClick="takePhotoClick"
         android:text="@string/snap"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
 
     <Button
         android:id="@+id/searchPhotoButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="550dp"
+        android:layout_below="@id/takePhotoButton"
+        android:layout_alignLeft="@id/takePhotoButton"
+        android:layout_marginTop="50dp"
         android:onClick="searchPhotoClick"
         android:text="Search"
         android:textStyle="bold"/>
@@ -50,23 +53,27 @@
         android:id="@+id/viewPhotoButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="600dp"
+        android:layout_alignTop="@id/takePhotoButton"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="50dp"
+        android:layout_marginRight="50dp"
         android:onClick="viewPhotoClick"
         android:text="View"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
 
     <Button
         android:id="@+id/unspecfiedButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="650dp"
+        android:layout_alignTop="@id/searchPhotoButton"
+        android:layout_alignEnd="@id/viewPhotoButton"
+        android:layout_alignRight="@id/viewPhotoButton"
         android:onClick="unspecifiedClick"
         android:text="TBD"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
+
+
 
 
 

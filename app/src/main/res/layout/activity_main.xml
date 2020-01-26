@@ -53,6 +53,11 @@
         android:drawableLeft="@drawable/ic_label_black_24dp"
         android:drawablePadding="10dp"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="datetime"
+
     <Button
         android:id="@+id/takePhotoButton"
         android:layout_width="110dp"

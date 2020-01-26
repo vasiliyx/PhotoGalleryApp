@@ -7,16 +7,6 @@
     android:background="#222"
     tools:context=".MainActivity">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:minHeight="?attr/actionBarSize"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:titleTextColor="@android:color/white"
-        android:background="?attr/colorPrimary">
-    </androidx.appcompat.widget.Toolbar>
-
-
     <ImageView
         android:id="@+id/ivGallery"
         android:layout_width="wrap_content"
@@ -56,7 +46,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="datetime"
+        android:inputType="datetime"/>
 
     <Button
         android:id="@+id/takePhotoButton"

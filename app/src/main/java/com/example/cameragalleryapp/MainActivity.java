@@ -18,8 +18,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import android.widget.EditText;
 
-
-
 public class MainActivity extends AppCompatActivity {
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -35,8 +33,7 @@ public class MainActivity extends AppCompatActivity {
         initImageCount(); // Determine the image count
     }
 
-
-
+    // SNAP button runs this method
     public void takePhotoClick(View v) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
@@ -76,7 +73,6 @@ public class MainActivity extends AppCompatActivity {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageCount_str = intToString(imageCount);
-
         String imageFileName = "IMG" + imageCount_str + "_" +  timeStamp + "_"; // add time stamp to file name
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(imageFileName, ".jpg",storageDir);

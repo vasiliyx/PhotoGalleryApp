@@ -46,6 +46,11 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:text="Automatic Time Tagged"
+        android:textColor="#FFF"
+        android:textSize="20sp"
         android:inputType="datetime"/>
 
     <Button

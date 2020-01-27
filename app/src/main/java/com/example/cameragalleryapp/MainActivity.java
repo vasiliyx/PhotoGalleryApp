@@ -87,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             ImageView mImageView = (ImageView) findViewById(R.id.ivGallery); //grab handle
             mImageView.setImageBitmap(BitmapFactory.decodeFile(mCurrentPhotoPath)); //JPEG to BITMAP (bit map has intensity at each pixel)
+
         }
     }
 

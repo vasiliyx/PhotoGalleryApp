@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import android.widget.EditText;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,6 +32,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initImageCount(); // Determine the image count
+
+    }
+
+    public void captionClick(View v) {
+        EditText captionEditText = (EditText) findViewById(R.id.captionEditText);
+        TextView captionTextView = (TextView) findViewById(R.id.captionTextView);
+        String caption = captionEditText.getText().toString();
+        captionTextView.setText(caption);
     }
 
     // SNAP button runs this method

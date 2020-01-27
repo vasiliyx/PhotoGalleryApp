@@ -37,21 +37,21 @@
         android:textSize="18sp"
         android:textStyle="italic"
         android:textColor="#000"
-        android:hint="Enter a caption for your photo."
+        android:hint="Enter a caption for your photo"
         android:textColorHint="#333"
         android:background="@drawable/et_rounded_style"
         android:drawableLeft="@drawable/ic_label_black_24dp"
-        android:drawablePadding="10dp"/>
+        android:drawablePadding="10dp"
+        android:onClick="captionClick"/>
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/captionTextView"
+        android:layout_width="100dp"
+        android:layout_height="30dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:text="Automatic Time Tagged"
         android:textColor="#FFF"
-        android:textSize="20sp"
-        android:inputType="datetime"/>
+        android:textSize="20sp" />
 
     <Button
         android:id="@+id/takePhotoButton"
@@ -102,7 +102,7 @@
         android:layout_alignEnd="@id/viewPhotoButton"
         android:layout_alignRight="@id/viewPhotoButton"
         android:onClick="unspecifiedClick"
-        android:text="TBD"
+        android:text="Enter"
         android:textStyle="bold" />
 
     <ImageButton

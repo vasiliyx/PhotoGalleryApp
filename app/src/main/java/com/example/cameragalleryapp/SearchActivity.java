@@ -12,10 +12,10 @@ import java.util.Calendar;
 
 public class SearchActivity extends AppCompatActivity {
 
-//    private EditText fromDate; //enable when using search by date -RM
-//    private EditText toDate;
-//    private Calendar fromCalendar;
-//    private Calendar toCalendar;
+    private EditText fromDate;
+    private EditText toDate;
+    private Calendar fromCalendar;
+    private Calendar toCalendar;
     private DatePickerDialog.OnDateSetListener fromListener;
     private DatePickerDialog.OnDateSetListener toListener;
 
@@ -23,19 +23,19 @@ public class SearchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-//        EditText fromDateEditText = (EditText) findViewById(R.id.fromDateEditText); //enable when using search by date -RM
-//        EditText toDateEditText   = (EditText) findViewById(R.id.toDateEditText); //enable when using search by date -RM
+        fromDate = (EditText) findViewById(R.id.timeStartEditText);
+        toDate   = (EditText) findViewById(R.id.timeEndEditText);
     }
 
 
-    public void cancel(final View v) {
+    public void cancel(final View view) {
         finish();
     }
 
-    public void search(final View v) {
+    public void search(final View view) {
         Intent intent = new Intent();
-//        intent.putExtra("STARTDATE", fromDateEditText.getText().toString()); //enable when using search by date -RM
-//        intent.putExtra("ENDDATE", toDateEditText.getText().toString()); //enable when using search by date -RM
+        intent.putExtra("STARTDATE", fromDate.getText().toString());
+        intent.putExtra("ENDDATE", toDate.getText().toString());
         setResult(RESULT_OK, intent);
         finish();
     }

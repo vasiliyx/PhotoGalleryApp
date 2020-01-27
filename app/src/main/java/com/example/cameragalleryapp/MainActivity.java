@@ -37,6 +37,7 @@ import java.util.List;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -77,6 +78,12 @@ public class MainActivity extends AppCompatActivity {
         Log.d("MainActivity", "onCreate: myStoragePath: " + myStoragePath);
     }
 
+    public void captionClick(View v) {
+        EditText captionEditText = (EditText) findViewById(R.id.captionEditText);
+        TextView captionTextView = (TextView) findViewById(R.id.captionTextView);
+        String caption = captionEditText.getText().toString();
+        captionTextView.setText(caption);
+    }
 
     // Function to check and request permission.
     // TODO figure the permisions out: how to request them in case they've been revoked
@@ -99,9 +106,12 @@ public class MainActivity extends AppCompatActivity {
 
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    public void takePhotoClick(View v) {
+    // SNAP button runs this method
+    public void takePhotoClick(View v)
+    {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null)
+        {
             File photoFile = null;
 
             // Create an Image file with Caption file
@@ -113,11 +123,10 @@ public class MainActivity extends AppCompatActivity {
             }
 
             // if the File was successfully created, write an image to the file from the intent of taking photo
-            if (photoFile != null) {
-
+            if (photoFile != null)
+            {
                 // Obtain the URI for the files
                 Uri photoURI = FileProvider.getUriForFile(this, "com.example.cameragalleryapp.fileprovider", photoFile);
-
 
                 // Write the image file when done with the takePictureIntent
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI); //  Standard Android Take Picture Intent
@@ -126,6 +135,22 @@ public class MainActivity extends AppCompatActivity {
 
             updateListDirectory(storageDir);
         }
+    }
+
+    // Creates an image file on the file system
+    public void filterPhotoClick (View v) {
+        Intent intent = new Intent(this, SearchActivity.class);
+        startActivity(intent);
+
+    }
+
+    public void scrollPhotoLeftClick(View v) {
+
+
+    }
+
+    public void scrollPhotoRightClick (View v) {
+
     }
 
     // This will create an image file as well as the caption file
@@ -175,15 +200,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void scrollPhotoLeftClick(View v) {
-
-
-    }
-
-    public void scrollPhotoRightClick (View v) {
-
-    }
-
 
 
     // When coming back from another activity
@@ -193,12 +209,12 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             ImageView mImageView = (ImageView) findViewById(R.id.ivGallery); //grab handle
             mImageView.setImageBitmap(BitmapFactory.decodeFile(myCurrentPhotoPath)); //JPEG to BITMAP (bit map has intensity at each pixel)
+
         }
     }
 
-
-
-    // Convert the image count into a string with fixed length
+    // Convert the image count into a string with fixed length. Such string is used in the image name
+    // for example: IMG_01432
     // VB
     static private String intToString(int number) {
         int stringLengthDesired = 5; // number of characters in the string
@@ -213,7 +229,6 @@ public class MainActivity extends AppCompatActivity {
 
         return number_str;
     }
-
 
 
 

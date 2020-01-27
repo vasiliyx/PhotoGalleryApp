@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SearchActivity">
+
+    <TextView
+        android:id="@+id/keywordsTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:text="@string/caption_based_search"
+        android:textSize="22sp"
+        android:textColor="#000"/>
+
+    <EditText
+        android:id="@+id/keywordsEditText"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/keywordsTextView"
+        android:layout_marginTop="5dp"
+        android:inputType="textCapSentences"
+        android:textSize="18sp"
+        android:textStyle="italic"
+        android:textColor="#000"
+        android:hint="Enter Keywords"
+        android:textColorHint="#333"
+        android:background="@drawable/et_rounded_style"
+        android:drawableLeft="@drawable/ic_search_black_24dp"
+        android:drawablePadding="10dp"
+        android:autofillHints="" />
+
+    <TextView
+        android:id="@+id/timeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/keywordsEditText"
+        android:layout_marginTop="50dp"
+        android:text="Time Based Search"
+        android:textSize="22sp"
+        android:textColor="#000"/>
+
+    <EditText
+        android:id="@+id/timeStartEditText"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_below="@id/timeTextView"
+        android:layout_centerHorizontal="true"
+        android:inputType="datetime"
+        android:textSize="18sp"
+        android:textStyle="italic"
+        android:textColor="#000"
+        android:hint="Enter Start Time"
+        android:textColorHint="#333"
+        android:background="@drawable/et_rounded_style"
+        android:drawableLeft="@drawable/ic_search_black_24dp"
+        android:drawablePadding="10dp"
+        android:autofillHints="" />
+
+    <EditText
+        android:id="@+id/timeEndEditText"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_below="@id/timeStartEditText"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:inputType="datetime"
+        android:textSize="18sp"
+        android:textStyle="italic"
+        android:textColor="#000"
+        android:hint="Enter End Time"
+        android:textColorHint="#333"
+        android:background="@drawable/et_rounded_style"
+        android:drawableLeft="@drawable/ic_search_black_24dp"
+        android:drawablePadding="10dp"
+        android:autofillHints="" />
+
+
+    <TextView
+        android:id="@+id/locationTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/timeEndEditText"
+        android:layout_marginTop="50dp"
+        android:text="Location Based Search"
+        android:textSize="22sp"
+        android:textColor="#000"/>
+
+    <EditText
+        android:id="@+id/topLeftEditText"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/locationTextView"
+        android:layout_marginTop="5dp"
+        android:inputType="textCapSentences"
+        android:textSize="18sp"
+        android:textStyle="italic"
+        android:textColor="#000"
+        android:hint="Enter Top Left Corner"
+        android:textColorHint="#333"
+        android:background="@drawable/et_rounded_style"
+        android:drawableLeft="@drawable/ic_search_black_24dp"
+        android:drawablePadding="10dp"
+        android:autofillHints="" />
+
+    <EditText
+        android:id="@+id/bottomRightEditText"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/topLeftEditText"
+        android:layout_marginTop="5dp"
+        android:inputType="textCapSentences"
+        android:textSize="18sp"
+        android:textStyle="italic"
+        android:textColor="#000"
+        android:hint="Enter Bottom Right Corner"
+        android:textColorHint="#333"
+        android:background="@drawable/et_rounded_style"
+        android:drawableLeft="@drawable/ic_search_black_24dp"
+        android:drawablePadding="10dp"
+        android:autofillHints="" />
+
+
+</RelativeLayout>

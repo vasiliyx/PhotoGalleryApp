@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -29,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         initImageCount(); // Determine the image count
     }
 
@@ -53,13 +53,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Creates an image file on the file system
-    public void searchPhotoClick (View v) {
-        Intent intent = new Intent(this, ViewPhotoActivity.class);
+    public void filterPhotoClick (View v) {
+        Intent intent = new Intent(this, SearchActivity.class);
         startActivity(intent);
 
     }
 
     public void scrollPhotoLeftClick(View v) {
+
 
 
     }
@@ -71,12 +72,13 @@ public class MainActivity extends AppCompatActivity {
     // This will create an image file as well as the caption file
     public File createImageFile() throws IOException {
         // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()); //timestamp format
         String imageCount_str = intToString(imageCount);
-        String imageFileName = "IMG" + imageCount_str + "_" +  timeStamp + "_"; // add time stamp to file name
+        String imageFileName = "IMG" + imageCount_str + "_" +  timeStamp + "_"; // add timestamp and image count to file name
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(imageFileName, ".jpg",storageDir);
         mCurrentPhotoPath = image.getAbsolutePath();
+        Log.d("createImageFile", mCurrentPhotoPath);
         return image;
     }
 
@@ -90,8 +92,6 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
-
-
 
     // Convert the image count into a string with fixed length
     // VB

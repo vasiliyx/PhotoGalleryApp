@@ -70,14 +70,14 @@
         android:drawablePadding="3dp"/>
 
     <Button
-        android:id="@+id/searchPhotoButton"
+        android:id="@+id/filterPhotoButton"
         android:layout_width="110dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/takePhotoButton"
         android:layout_alignLeft="@id/takePhotoButton"
         android:layout_marginTop="15dp"
-        android:onClick="searchPhotoClick"
-        android:text="Search"
+        android:onClick="filterPhotoClick"
+        android:text="Filter"
         android:textStyle="bold"
         android:drawableLeft="@drawable/ic_search_black_24dp"/>
 
@@ -98,7 +98,7 @@
         android:id="@+id/unspecfiedButton"
         android:layout_width="110dp"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@id/searchPhotoButton"
+        android:layout_alignTop="@id/filterPhotoButton"
         android:layout_alignEnd="@id/viewPhotoButton"
         android:layout_alignRight="@id/viewPhotoButton"
         android:onClick="unspecifiedClick"
@@ -110,9 +110,9 @@
         android:src="@drawable/ic_arrow_back_black_50dp"
         android:layout_width="150dp"
         android:layout_height="100dp"
-        android:layout_below="@id/searchPhotoButton"
-        android:layout_alignStart="@id/searchPhotoButton"
-        android:layout_alignLeft="@id/searchPhotoButton"
+        android:layout_below="@id/filterPhotoButton"
+        android:layout_alignStart="@id/filterPhotoButton"
+        android:layout_alignLeft="@id/filterPhotoButton"
         android:layout_marginTop="15dp"
         android:onClick="scrollPhotoLeftClick" />
 

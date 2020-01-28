@@ -9,6 +9,7 @@ import androidx.core.content.FileProvider;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
     static List <String> fileNameList  = new ArrayList<String>(); // List of all the files in the directory (including the image and caption files)
     static List <String> imageFileNameList = new ArrayList<String>(); // List of all the image files in the directory
+    static List <String> dataFileNameList = new ArrayList<String>(); // List of all the data files in the directory
 
     static File storageDir; // Working directory path
 
@@ -72,14 +74,33 @@ public class MainActivity extends AppCompatActivity {
         // Determine the current image count
         updateImageCount();
 
+
         Log.d("MainActivity", "onCreate: myStoragePath: " + myStoragePath);
     }
 
     public void captionClick(View v) {
+        Log.d("MainActivity", "captionClick: called");
+
         EditText captionEditText = (EditText) findViewById(R.id.captionEditText);
         TextView captionTextView = (TextView) findViewById(R.id.captionTextView);
-        String caption = captionEditText.getText().toString();
+        String caption = captionEditText.getText().toString(); // Capture the caption string
         captionTextView.setText(caption);
+        Log.d("MainActivity", "captionClick: caption: " + caption);
+
+
+        // Load the data object associated to the image
+        String dataFileName = dataFileNameList.get(currentlyDisplayedImageIndex);
+        ImageData myImageData_ = null; // create an empty instance to hold the data
+        myImageData_ = (ImageData) Pickle.load(myImageData_, storageDir + "/" + dataFileName);
+
+        // Update the caption in the object
+        myImageData_.caption = caption;
+
+        // Save the data object to the file
+        Pickle.save(myImageData_, storageDir + "/" + dataFileName);
+
+        Log.d("MainActivity", "captionClick: " + "caption: " +  myImageData_.caption +", timeStamp: "+ myImageData_.timeStamp);
+
     }
 
     // Function to check and request permission.
@@ -156,22 +177,22 @@ public class MainActivity extends AppCompatActivity {
         Log.d("MainActivity", "createImageFile: imageFileName: "+ imageFileName);
 
         // Create a blank image and caption object, but they are not written on the file system yet
-        File image = new File(storageDir, imageFileName + ".jpg"); // USE THIS
-        File text = new File(storageDir, imageFileName + ".txt"); // USE THIS
+        File image = new File(storageDir, imageFileName + ".jpg");
+        File data = new File(storageDir, imageFileName + ".dat");
 
 
         // Obtain paths of the file object
         myCurrentPhotoPath = image.getAbsolutePath(); // Update the image path
-        myCurrentCaptionPath = text.getAbsolutePath(); // Update the caption path
+        myCurrentCaptionPath = data.getAbsolutePath(); // Update the caption path
         Log.d("MainActivity", "createImageFile: myCurrentPhotoPath: "+ myCurrentPhotoPath);
         Log.d("MainActivity", "createImageFile: myCurrentCaptionPath: "+ myCurrentCaptionPath);
 
 
-        // Create an a blank text file on the file system
-        try (Writer writer = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream(myCurrentCaptionPath), "utf-8"))) {
-            writer.write(timeStamp); // Write a time stamp
-        }
+        // Create a data file on the file system associated with the image
+        ImageData myImageData = new ImageData();
+        myImageData.caption = "";
+        myImageData.timeStamp = timeStamp;
+        Pickle.save(myImageData ,myCurrentCaptionPath); // Save the file
 
         // Image count will be determined after the files are created in the file system
         return image;
@@ -213,6 +234,10 @@ public class MainActivity extends AppCompatActivity {
         mImageView.setImageBitmap(BitmapFactory.decodeFile(myStoragePath+ "/" + imageFileName)); //JPEG to BITMAP (bit map has intensity at each pixel)
 
         // TODO implement the try when there is no files at all so that the app doesn't crash
+
+        // Update the caption on the screen. Load from the file. Show on the screen.
+        showCaption(v);
+
     }
 
     public void scrollPhotoRightClick (View v) {
@@ -235,8 +260,36 @@ public class MainActivity extends AppCompatActivity {
         mImageView.setImageBitmap(BitmapFactory.decodeFile(myStoragePath+ "/" + imageFileName)); //JPEG to BITMAP (bit map has intensity at each pixel)
 
         // TODO implement the try when there is no files at all so that the app doesn't crash
+
+
+        // Update the caption on the screen. Load from the file. Show on the screen.
+        showCaption(v);
+
     }
 
+    // Display/update the caption on the screen.
+    // - Load the data from the file for the corresponding viewing image
+    // - Show the caption on the screen.
+    // args: view: view object of the context
+    private void showCaption(View v){
+        Log.d("MainActivity", "showCaption: called");
+
+        TextView captionTextView = (TextView) findViewById(R.id.captionTextView);
+
+        // Load the data object associated to the image
+        String dataFileName = dataFileNameList.get(currentlyDisplayedImageIndex);
+        ImageData myImageData_ = null; // create an empty instance to hold the data
+        myImageData_ = (ImageData) Pickle.load(myImageData_, storageDir + "/" + dataFileName);
+
+        // Obtain the caption data from the object
+        String caption = myImageData_.caption;
+
+        // Display the caption on the screen
+        captionTextView.setText(caption);
+
+        Log.d("MainActivity", "" + "caption: " +  myImageData_.caption +", timeStamp: "+ myImageData_.timeStamp);
+
+    }
 
 
     // When coming back from another activity
@@ -251,7 +304,9 @@ public class MainActivity extends AppCompatActivity {
 
         // Update the image count. Update the List of files. Needed for naming future naming and image preview.
         updateImageCount();
+        currentlyDisplayedImageIndex = imageFileNameList.size()-1; // update the index
     }
+
 
     // Convert the image count into a string with fixed length. Such string is used in the image name
     // for example: input: 1432. Output: "IMG_01432"
@@ -287,15 +342,25 @@ public class MainActivity extends AppCompatActivity {
 
             // Add the fileName to the list
             fileNameList.add(fileName);
-            Log.i("FILE NAME:", file.getName());
 
+
+            // Assumption: the name of the .dat and .jpg files are the same to have it working
 
             // Check if the file name is the same as the image file name, and add to the list
-            boolean isMatch = fileName.matches("(.*)IMG_[0-9]{5}.jpg(.*)");
-            if (isMatch){
+            boolean isImage = fileName.matches("(.*)IMG_[0-9]{5}.jpg(.*)");
+            if (isImage){
                 imageFileNameList.add(fileName);
             }
+
+            // Check if the file name is the same as the data file name, and add to the list
+            boolean isData = fileName.matches("(.*)IMG_[0-9]{5}.dat(.*)");
+            if (isData){
+                dataFileNameList.add(fileName);
+            }
+
+            Log.i("FILE NAME", file.getName() + ", isImage: " + isImage + ", isData: " + isData);
         }
+
 
     }
 
@@ -317,10 +382,15 @@ public class MainActivity extends AppCompatActivity {
             String digits_str;
             int number;
 
-            // Extract the digits form the file name
-            digits_str = fileName_.replaceAll("[^0-9]", ""); // replace any character that is not a digit with nothing
-
-            number = Integer.parseInt(digits_str);
+            // Try extract the digits form the file name to determine the maximum image count
+            try{
+                digits_str = fileName_.replaceAll("[^0-9]", ""); // replace any character that is not a digit with nothing
+                number = Integer.parseInt(digits_str);
+            }
+            // File name doesn't match the image naming convention
+            catch(Exception e) {
+                number = 0;
+            }
 
             // Update the max number
             maxNumber = Math.max(maxNumber, number);

@@ -46,9 +46,8 @@ public class MainActivity extends AppCompatActivity {
 
     static File storageDir; // Working directory path
 
-    static int imageCount = 0; // create an init the count to zero unless there already exists an image with higher number
-
-    int currentlyDisplayedImageIndex = 0;
+    static int imageCount = 0; // Used to increment the name of the file
+    static int currentlyDisplayedImageIndex = 0; // Used for displaying the image from the list
 
     // Defining Permission codes.
     // We can give any value
@@ -190,8 +189,7 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d("MainActivity","viewPhotoClick: called");
 
-
-
+        // TODO implement the try when there is no files at all so that the app doesn't crash
     }
 
 
@@ -214,6 +212,7 @@ public class MainActivity extends AppCompatActivity {
         ImageView mImageView = (ImageView) findViewById(R.id.ivGallery); //grab handle
         mImageView.setImageBitmap(BitmapFactory.decodeFile(myStoragePath+ "/" + imageFileName)); //JPEG to BITMAP (bit map has intensity at each pixel)
 
+        // TODO implement the try when there is no files at all so that the app doesn't crash
     }
 
     public void scrollPhotoRightClick (View v) {
@@ -250,16 +249,12 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-        // Update the Image count. Update the List of files.
+        // Update the image count. Update the List of files. Needed for naming future naming and image preview.
         updateImageCount();
-
-        // TODO implement the try when there is no files at all so that the app doesn't crash
-
     }
 
     // Convert the image count into a string with fixed length. Such string is used in the image name
-    // for example: IMG_01432
-    // VB
+    // for example: input: 1432. Output: "IMG_01432"
     static private String intToString(int number) {
         int stringLengthDesired = 5; // number of characters in the string
 
@@ -279,7 +274,6 @@ public class MainActivity extends AppCompatActivity {
     // Update the list of all the files in the specified directory
     // Args: Directory path
     // Out: updates fileNameList, update the imageFileNameList
-    // VB
     static private void updateListDirectory(File dir){
         Log.d("MainActivity", "updateListDirectory: called");
 
@@ -306,9 +300,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    // Upon startup, determine the image count
-    // Scan the working directory for all files, and find the file with the highest count
-    // VB
+    // Upon startup, determine the image count.
+    // - Scan the working directory for all files, and find the file with the highest count.
+    // - Update the fileNameList and imageFileNameList
     static private void updateImageCount(){
         Log.d("MainActivity", "updateImageCount: "+"called");
 
@@ -331,11 +325,9 @@ public class MainActivity extends AppCompatActivity {
             // Update the max number
             maxNumber = Math.max(maxNumber, number);
 
-
         }
 
         imageCount = maxNumber;
-
         Log.d("MainActivity", "imageCount: " + imageCount);
     }
 

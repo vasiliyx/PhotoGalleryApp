@@ -85,8 +85,10 @@ public class MainActivity extends AppCompatActivity {
         TextView captionTextView = (TextView) findViewById(R.id.captionTextView);
         String caption = captionEditText.getText().toString(); // Capture the caption string
         captionTextView.setText(caption);
-        Log.d("MainActivity", "captionClick: caption: " + caption);
+        Log.d("MainActivity", "captionClick: caption: " + caption + ", currentlyDisplayedImageIndex: " + currentlyDisplayedImageIndex);
 
+        Debug.printList("dataFileNameList", dataFileNameList);
+        Debug.printList("imageFileNameList", imageFileNameList);
 
         // Load the data object associated to the image
         String dataFileName = dataFileNameList.get(currentlyDisplayedImageIndex);
@@ -234,6 +236,9 @@ public class MainActivity extends AppCompatActivity {
 
         // TODO implement the try when there is no files at all so that the app doesn't crash
 
+        // Clear the Text Edit field for Caption.
+        clearCaptionTextEdit();
+
         // Update the caption on the screen. Load from the file. Show on the screen.
         showCaption(v);
 
@@ -260,9 +265,13 @@ public class MainActivity extends AppCompatActivity {
 
         // TODO implement the try when there is no files at all so that the app doesn't crash
 
+        // Clear the Text Edit field for Caption.
+        clearCaptionTextEdit();
 
         // Update the caption on the screen. Load from the file. Show on the screen.
         showCaption(v);
+
+
 
     }
 
@@ -290,10 +299,30 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    // Clear the Text Edit field for Caption. User should have an empty box to start typing in.
+    // Needed when user entered the text edit and then moves on to another photo and put a caption there
+    private void clearCaptionTextEdit() {
+        Log.d("MainActivity", "clearCaptionTextEdit: called");
+
+        EditText captionEditText = (EditText) findViewById(R.id.captionEditText);
+        captionEditText.setText("");
+    }
+
+
+    // Clear the Text View field for Caption. User should see nothing after a new picture is taken.
+    // Needed when a new photo is taken, and we are looking to enter a new caption or half no caption.
+    private void clearCaptionTextView() {
+        Log.d("MainActivity", "clearCaptionTextView: called");
+
+        TextView captionTextView = (TextView) findViewById(R.id.captionTextView);
+        captionTextView.setText("");
+    }
 
     // When coming back from another activity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d("MainActivity", "onActivityResult: called");
+
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             ImageView mImageView = (ImageView) findViewById(R.id.ivGallery); //grab handle
@@ -301,9 +330,14 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
+        // Clear the Text Edit and Text View fields for Caption.
+        clearCaptionTextEdit();
+        clearCaptionTextView();
+
         // Update the image count. Update the List of files. Needed for naming future naming and image preview.
         updateImageCount();
-        currentlyDisplayedImageIndex = imageFileNameList.size()-1; // update the index
+        currentlyDisplayedImageIndex = imageFileNameList.size() - 1; // update the index
+        Log.d("MainActivity", "onActivityResult: currentlyDisplayedImageIndex: "+ currentlyDisplayedImageIndex + ", imageFileNameList.size(): " + imageFileNameList.size());
     }
 
 
@@ -333,9 +367,11 @@ public class MainActivity extends AppCompatActivity {
 
         File[] files = dir.listFiles(); // capture all the files in the directory
 
-        // Update the fileList
+        // Update the fileList, imageFileNameList, dataFileNameList
         fileNameList.clear();
         imageFileNameList.clear();
+        dataFileNameList.clear();
+
         for (File file : files) {
             String fileName = file.getName();
 

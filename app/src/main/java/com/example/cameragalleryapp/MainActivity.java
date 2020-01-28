@@ -169,13 +169,11 @@ public class MainActivity extends AppCompatActivity {
         File image = new File(storageDir, imageFileName + ".jpg"); // USE THIS
         File text = new File(storageDir, imageFileName + ".txt"); // USE THIS
 
-
         // Obtain paths of the file object
         myCurrentPhotoPath = image.getAbsolutePath(); // Update the image path
         myCurrentCaptionPath = text.getAbsolutePath(); // Update the caption path
         Log.d("MainActivity", "createImageFile: myCurrentPhotoPath: "+ myCurrentPhotoPath);
         Log.d("MainActivity", "createImageFile: myCurrentCaptionPath: "+ myCurrentCaptionPath);
-
 
         // Create an a blank text file on the file system
         try (Writer writer = new BufferedWriter(new OutputStreamWriter(

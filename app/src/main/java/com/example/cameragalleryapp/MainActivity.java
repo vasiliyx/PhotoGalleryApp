@@ -180,7 +180,6 @@ public class MainActivity extends AppCompatActivity {
         File image = new File(storageDir, imageFileName + ".jpg");
         File data = new File(storageDir, imageFileName + ".dat");
 
-
         // Obtain paths of the file object
         myCurrentPhotoPath = image.getAbsolutePath(); // Update the image path
         myCurrentCaptionPath = data.getAbsolutePath(); // Update the caption path

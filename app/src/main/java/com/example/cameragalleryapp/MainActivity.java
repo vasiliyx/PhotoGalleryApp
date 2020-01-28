@@ -6,7 +6,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
-import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
@@ -21,11 +20,8 @@ import android.widget.ImageView;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.text.SimpleDateFormat;
@@ -35,7 +31,6 @@ import java.util.List;
 
 
 import android.widget.EditText;
-import android.widget.Toast;
 
 import android.widget.TextView;
 
@@ -46,11 +41,13 @@ public class MainActivity extends AppCompatActivity {
     static String myCurrentCaptionPath; // this will be updated every time a new image is taken
     static String myStoragePath; // this will remain the same through the program
 
-    static List <String> fileNameList  = new ArrayList<String>(); // List of all the files in the directory
+    static List <String> fileNameList  = new ArrayList<String>(); // List of all the files in the directory (including the image and caption files)
+    static List <String> imageFileNameList = new ArrayList<String>(); // List of all the image files in the directory
 
     static File storageDir; // Working directory path
 
-    static int imageCount = 0; // create an init the count to zero unless there already exists an image with higher number
+    static int imageCount = 0; // Used to increment the name of the file
+    static int currentlyDisplayedImageIndex = 0; // Used for displaying the image from the list
 
     // Defining Permission codes.
     // We can give any value
@@ -125,6 +122,7 @@ public class MainActivity extends AppCompatActivity {
             // if the File was successfully created, write an image to the file from the intent of taking photo
             if (photoFile != null)
             {
+
                 // Obtain the URI for the files
                 Uri photoURI = FileProvider.getUriForFile(this, "com.example.cameragalleryapp.fileprovider", photoFile);
 
@@ -133,7 +131,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE); // Start the activity
             }
 
-            updateListDirectory(storageDir);
         }
     }
 
@@ -144,14 +141,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void scrollPhotoLeftClick(View v) {
 
-
-    }
-
-    public void scrollPhotoRightClick (View v) {
-
-    }
 
     // This will create an image file as well as the caption file
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -181,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
             writer.write(timeStamp); // Write a time stamp
         }
 
-        imageCount++; // Increment the current image count
+        // Image count will be determined after the files are created in the file system
         return image;
     }
 
@@ -192,11 +182,58 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    //
+    // Show the particular image
     public void viewPhotoClick (View v) {
 
+        Log.d("MainActivity","viewPhotoClick: called");
+
+        // TODO implement the try when there is no files at all so that the app doesn't crash
     }
 
+
+    public void scrollPhotoLeftClick(View v) {
+        Log.d("MainActivity","scrollPhotoLeftClick: called");
+
+        // Get the total number of images form the list. This is different from imageCount.
+        int numberOfImages = imageFileNameList.size();
+
+        // decrement the display index
+        currentlyDisplayedImageIndex -= 1;
+        if (currentlyDisplayedImageIndex <0) currentlyDisplayedImageIndex += numberOfImages; // ratify for the negative index value (make positive)
+        currentlyDisplayedImageIndex %= (numberOfImages);
+        Log.d("MainActivity","scrollPhotoRightClick: Index: " + currentlyDisplayedImageIndex + "; Number of Images: " + numberOfImages);
+
+        // Get the image file name for the new displaying index
+        String imageFileName = imageFileNameList.get(currentlyDisplayedImageIndex);
+
+        // Show the image
+        ImageView mImageView = (ImageView) findViewById(R.id.ivGallery); //grab handle
+        mImageView.setImageBitmap(BitmapFactory.decodeFile(myStoragePath+ "/" + imageFileName)); //JPEG to BITMAP (bit map has intensity at each pixel)
+
+        // TODO implement the try when there is no files at all so that the app doesn't crash
+    }
+
+    public void scrollPhotoRightClick (View v) {
+        Log.d("MainActivity","scrollPhotoRightClick: called");
+
+        // Get the total number of images form the list. This is different from imageCount.
+        int numberOfImages = imageFileNameList.size();
+
+
+        // increment the display index
+        currentlyDisplayedImageIndex += 1;
+        currentlyDisplayedImageIndex %= (numberOfImages);
+        Log.d("MainActivity","scrollPhotoRightClick: Index: " + currentlyDisplayedImageIndex + "; Number of Images: " + numberOfImages);
+
+        // Get the image file name for the new displaying index
+        String imageFileName = imageFileNameList.get(currentlyDisplayedImageIndex);
+
+        // Show the image
+        ImageView mImageView = (ImageView) findViewById(R.id.ivGallery); //grab handle
+        mImageView.setImageBitmap(BitmapFactory.decodeFile(myStoragePath+ "/" + imageFileName)); //JPEG to BITMAP (bit map has intensity at each pixel)
+
+        // TODO implement the try when there is no files at all so that the app doesn't crash
+    }
 
 
 
@@ -209,11 +246,13 @@ public class MainActivity extends AppCompatActivity {
             mImageView.setImageBitmap(BitmapFactory.decodeFile(myCurrentPhotoPath)); //JPEG to BITMAP (bit map has intensity at each pixel)
 
         }
+
+        // Update the image count. Update the List of files. Needed for naming future naming and image preview.
+        updateImageCount();
     }
 
     // Convert the image count into a string with fixed length. Such string is used in the image name
-    // for example: IMG_01432
-    // VB
+    // for example: input: 1432. Output: "IMG_01432"
     static private String intToString(int number) {
         int stringLengthDesired = 5; // number of characters in the string
 
@@ -232,8 +271,7 @@ public class MainActivity extends AppCompatActivity {
 
     // Update the list of all the files in the specified directory
     // Args: Directory path
-    // Out: updates fileNameList
-    // VB
+    // Out: updates fileNameList, update the imageFileNameList
     static private void updateListDirectory(File dir){
         Log.d("MainActivity", "updateListDirectory: called");
 
@@ -241,16 +279,28 @@ public class MainActivity extends AppCompatActivity {
 
         // Update the fileList
         fileNameList.clear();
+        imageFileNameList.clear();
         for (File file : files) {
-            fileNameList.add(file.getName());
+            String fileName = file.getName();
+
+            // Add the fileName to the list
+            fileNameList.add(fileName);
             Log.i("FILE NAME:", file.getName());
+
+
+            // Check if the file name is the same as the image file name, and add to the list
+            boolean isMatch = fileName.matches("(.*)IMG_[0-9]{5}.jpg(.*)");
+            if (isMatch){
+                imageFileNameList.add(fileName);
+            }
         }
+
     }
 
 
-    // Upon startup, determine the image count
-    // Scan the working directory for all files, and find the file with the highest count
-    // VB
+    // Upon startup, determine the image count.
+    // - Scan the working directory for all files, and find the file with the highest count.
+    // - Update the fileNameList and imageFileNameList
     static private void updateImageCount(){
         Log.d("MainActivity", "updateImageCount: "+"called");
 
@@ -276,7 +326,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         imageCount = maxNumber;
-
         Log.d("MainActivity", "imageCount: " + imageCount);
     }
 

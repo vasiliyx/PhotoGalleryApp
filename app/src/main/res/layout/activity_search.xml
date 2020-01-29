@@ -13,7 +13,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
         android:text="@string/caption_based_search"
-        android:textSize="22sp"
+        android:textSize="30sp"
         android:textColor="#000"/>
 
     <EditText
@@ -43,7 +43,7 @@
         android:layout_below="@+id/keywordsEditText"
         android:layout_marginTop="50dp"
         android:text="Time Based Search"
-        android:textSize="22sp"
+        android:textSize="30sp"
         android:textColor="#000"/>
 
     <EditText
@@ -93,7 +93,7 @@
         android:layout_below="@id/timeEndEditText"
         android:layout_marginTop="50dp"
         android:text="Location Based Search"
-        android:textSize="22sp"
+        android:textSize="30sp"
         android:textColor="#000"/>
 
     <EditText

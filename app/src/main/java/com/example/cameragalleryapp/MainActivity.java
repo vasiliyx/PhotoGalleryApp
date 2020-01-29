@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
     // This method is used at the start up and/or when there are no images in the list
     private void displayDefaultImage(){
         ImageView galleryImageView = (ImageView) findViewById(R.id.galleryImageView);
-        galleryImageView.setImageResource(R.drawable.nothing_image);
+        galleryImageView.setImageResource(R.drawable.ic_launcher_background);
 
     }
 

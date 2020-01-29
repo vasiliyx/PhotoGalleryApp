@@ -33,7 +33,7 @@
         android:background="@drawable/et_rounded_style"
         android:drawableLeft="@drawable/ic_search_black_24dp"
         android:drawablePadding="10dp"
-        android:autofillHints="" />
+        android:onClick="searchForCaptionClick" />
 
     <TextView
         android:id="@+id/timeTextView"

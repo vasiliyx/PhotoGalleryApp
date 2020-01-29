@@ -8,7 +8,7 @@
     tools:context=".MainActivity">
 
     <ImageView
-        android:id="@+id/ivGallery"
+        android:id="@+id/galleryImageView"
         android:layout_width="wrap_content"
         android:layout_height="324dp"
         android:layout_alignParentEnd="true"
@@ -31,7 +31,7 @@
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/ivGallery"
+        android:layout_below="@id/galleryImageView"
         android:layout_marginTop="20dp"
         android:inputType="textCapSentences"
         android:textSize="18sp"
@@ -101,7 +101,6 @@
         android:layout_alignTop="@id/filterPhotoButton"
         android:layout_alignEnd="@id/viewPhotoButton"
         android:layout_alignRight="@id/viewPhotoButton"
-        android:onClick="unspecifiedClick"
         android:text="Enter"
         android:textStyle="bold" />
 

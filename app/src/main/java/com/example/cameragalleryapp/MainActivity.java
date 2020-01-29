@@ -43,8 +43,8 @@ public class MainActivity extends AppCompatActivity {
     static String myStoragePath; // this will remain the same through the program
 
     static List <String> fileNameList  = new ArrayList<String>(); // List of all the files in the directory (including the image and caption files)
-    static List <String> imageFileNameList = new ArrayList<String>(); // List of all the image files in the directory
-    static List <String> dataFileNameList = new ArrayList<String>(); // List of all the data files in the directory
+    static List <String> fileShortNameList = new ArrayList<String>(); // List of all names of the image without the extension
+
 
     static File storageDir; // Working directory path
 
@@ -74,9 +74,45 @@ public class MainActivity extends AppCompatActivity {
         // Determine the current image count
         updateImageCount();
 
+        displayDefaultImage();
+
 
         Log.d("MainActivity", "onCreate: myStoragePath: " + myStoragePath);
     }
+
+    // Displays an empty image or some default image.
+    // This method is used at the start up and/or when there are no images in the list
+    private void displayDefaultImage(){
+        ImageView galleryImageView = (ImageView) findViewById(R.id.galleryImageView);
+        galleryImageView.setImageResource(R.drawable.nothing_image);
+
+    }
+
+    // Displays/updates the image on the screen using the currentlyDisplayedImageIndex
+    // If no images exist it will display the default image
+    private void displayCurrentImage(){
+
+        // Get the total number of images from the list. This is different from imageCount.
+        int numberOfImages = fileShortNameList.size();
+
+        // When there are images in the list
+        if (numberOfImages > 0){
+            // Get the image file name for the new displaying index
+            String imageFileName = fileShortNameList.get(currentlyDisplayedImageIndex) + ".jpg";
+
+            // Show the image
+            ImageView mImageView = (ImageView) findViewById(R.id.galleryImageView); //grab handle
+            mImageView.setImageBitmap(BitmapFactory.decodeFile(myStoragePath+ "/" + imageFileName)); //JPEG to BITMAP (bit map has intensity at each pixel)
+
+            showCaption();
+
+        }
+        // When there no images in the list, display default
+        else if (numberOfImages == 0){
+            displayDefaultImage();
+        }
+    }
+
 
     public void captionClick(View v) {
         Log.d("MainActivity", "captionClick: called");
@@ -87,11 +123,11 @@ public class MainActivity extends AppCompatActivity {
         captionTextView.setText(caption);
         Log.d("MainActivity", "captionClick: caption: " + caption + ", currentlyDisplayedImageIndex: " + currentlyDisplayedImageIndex);
 
-        Debug.printList("dataFileNameList", dataFileNameList);
-        Debug.printList("imageFileNameList", imageFileNameList);
+        Debug.printList("fileShortNameList", fileShortNameList);
 
         // Load the data object associated to the image
-        String dataFileName = dataFileNameList.get(currentlyDisplayedImageIndex);
+
+        String dataFileName = fileShortNameList.get(currentlyDisplayedImageIndex) + ".dat";
         ImageData myImageData_ = null; // create an empty instance to hold the data
         myImageData_ = (ImageData) Pickle.load(myImageData_, storageDir + "/" + dataFileName);
 
@@ -206,86 +242,91 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    // TODO remove this
     // Show the particular image
     public void viewPhotoClick (View v) {
 
         Log.d("MainActivity","viewPhotoClick: called");
 
-        // TODO implement the try when there is no files at all so that the app doesn't crash
     }
+
 
 
     public void scrollPhotoLeftClick(View v) {
         Log.d("MainActivity","scrollPhotoLeftClick: called");
 
         // Get the total number of images form the list. This is different from imageCount.
-        int numberOfImages = imageFileNameList.size();
+        int numberOfImages = fileShortNameList.size();
 
-        // decrement the display index
-        currentlyDisplayedImageIndex -= 1;
-        if (currentlyDisplayedImageIndex <0) currentlyDisplayedImageIndex += numberOfImages; // ratify for the negative index value (make positive)
-        currentlyDisplayedImageIndex %= (numberOfImages);
-        Log.d("MainActivity","scrollPhotoRightClick: Index: " + currentlyDisplayedImageIndex + "; Number of Images: " + numberOfImages);
+        // When there are images in the list
+        if (numberOfImages > 0){
 
-        // Get the image file name for the new displaying index
-        String imageFileName = imageFileNameList.get(currentlyDisplayedImageIndex);
+            // decrement the display index
+            currentlyDisplayedImageIndex -= 1;
+            if (currentlyDisplayedImageIndex <0) currentlyDisplayedImageIndex += numberOfImages; // ratify for the negative index value (make positive)
+            currentlyDisplayedImageIndex %= (numberOfImages);
+            Log.d("MainActivity","scrollPhotoRightClick: Index: " + currentlyDisplayedImageIndex + "; Number of Images: " + numberOfImages);
 
-        // Show the image
-        ImageView mImageView = (ImageView) findViewById(R.id.ivGallery); //grab handle
-        mImageView.setImageBitmap(BitmapFactory.decodeFile(myStoragePath+ "/" + imageFileName)); //JPEG to BITMAP (bit map has intensity at each pixel)
+            // Update the image on the screen
+            displayCurrentImage();
 
-        // TODO implement the try when there is no files at all so that the app doesn't crash
+            // Update the caption on the screen. Load from the file. Show on the screen.
+            showCaption();
+        }
+
+        // When there no images in the list, display default
+        else if (numberOfImages == 0){
+            displayDefaultImage();
+            clearCaptionTextView();
+        }
 
         // Clear the Text Edit field for Caption.
         clearCaptionTextEdit();
-
-        // Update the caption on the screen. Load from the file. Show on the screen.
-        showCaption(v);
-
     }
 
     public void scrollPhotoRightClick (View v) {
         Log.d("MainActivity","scrollPhotoRightClick: called");
 
-        // Get the total number of images form the list. This is different from imageCount.
-        int numberOfImages = imageFileNameList.size();
+        // Get the total number of images from the list. This is different from imageCount.
+        int numberOfImages = fileShortNameList.size();
 
 
-        // increment the display index
-        currentlyDisplayedImageIndex += 1;
-        currentlyDisplayedImageIndex %= (numberOfImages);
-        Log.d("MainActivity","scrollPhotoRightClick: Index: " + currentlyDisplayedImageIndex + "; Number of Images: " + numberOfImages);
+        // When there are images in the list
+        if (numberOfImages > 0){
 
-        // Get the image file name for the new displaying index
-        String imageFileName = imageFileNameList.get(currentlyDisplayedImageIndex);
+            // increment the display index
+            currentlyDisplayedImageIndex += 1;
+            currentlyDisplayedImageIndex %= (numberOfImages);
+            Log.d("MainActivity","scrollPhotoRightClick: Index: " + currentlyDisplayedImageIndex + "; Number of Images: " + numberOfImages);
 
-        // Show the image
-        ImageView mImageView = (ImageView) findViewById(R.id.ivGallery); //grab handle
-        mImageView.setImageBitmap(BitmapFactory.decodeFile(myStoragePath+ "/" + imageFileName)); //JPEG to BITMAP (bit map has intensity at each pixel)
+            // Update the image on the screen
+            displayCurrentImage();
 
-        // TODO implement the try when there is no files at all so that the app doesn't crash
+            // Update the caption on the screen. Load from the file. Show on the screen.
+            showCaption();
+        }
+
+        // When there no images in the list, display default
+        else if (numberOfImages == 0){
+            displayDefaultImage();
+            clearCaptionTextView();
+        }
 
         // Clear the Text Edit field for Caption.
         clearCaptionTextEdit();
-
-        // Update the caption on the screen. Load from the file. Show on the screen.
-        showCaption(v);
-
-
-
     }
 
     // Display/update the caption on the screen.
     // - Load the data from the file for the corresponding viewing image
     // - Show the caption on the screen.
     // args: view: view object of the context
-    private void showCaption(View v){
+    private void showCaption(){
         Log.d("MainActivity", "showCaption: called");
 
         TextView captionTextView = (TextView) findViewById(R.id.captionTextView);
 
         // Load the data object associated to the image
-        String dataFileName = dataFileNameList.get(currentlyDisplayedImageIndex);
+        String dataFileName = fileShortNameList.get(currentlyDisplayedImageIndex) + ".dat";
         ImageData myImageData_ = null; // create an empty instance to hold the data
         myImageData_ = (ImageData) Pickle.load(myImageData_, storageDir + "/" + dataFileName);
 
@@ -325,7 +366,7 @@ public class MainActivity extends AppCompatActivity {
 
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            ImageView mImageView = (ImageView) findViewById(R.id.ivGallery); //grab handle
+            ImageView mImageView = (ImageView) findViewById(R.id.galleryImageView); //grab handle
             mImageView.setImageBitmap(BitmapFactory.decodeFile(myCurrentPhotoPath)); //JPEG to BITMAP (bit map has intensity at each pixel)
 
         }
@@ -334,10 +375,12 @@ public class MainActivity extends AppCompatActivity {
         clearCaptionTextEdit();
         clearCaptionTextView();
 
+        displayCurrentImage();
+
         // Update the image count. Update the List of files. Needed for naming future naming and image preview.
         updateImageCount();
-        currentlyDisplayedImageIndex = imageFileNameList.size() - 1; // update the index
-        Log.d("MainActivity", "onActivityResult: currentlyDisplayedImageIndex: "+ currentlyDisplayedImageIndex + ", imageFileNameList.size(): " + imageFileNameList.size());
+        currentlyDisplayedImageIndex = fileShortNameList.size() - 1; // update the index
+        Log.d("MainActivity", "onActivityResult: currentlyDisplayedImageIndex: "+ currentlyDisplayedImageIndex + ", fileShortNameList.size(): " + fileShortNameList.size());
     }
 
 
@@ -361,19 +404,21 @@ public class MainActivity extends AppCompatActivity {
 
     // Update the list of all the files in the specified directory
     // Args: Directory path
-    // Out: updates fileNameList, update the imageFileNameList
-    static private void updateListDirectory(File dir){
+    // Out: updates fileShortNameList
+    static public void updateListDirectory(){
         Log.d("MainActivity", "updateListDirectory: called");
+
+        File dir = storageDir;
 
         File[] files = dir.listFiles(); // capture all the files in the directory
 
-        // Update the fileList, imageFileNameList, dataFileNameList
+        // Update the fileList, fileShortNameList
         fileNameList.clear();
-        imageFileNameList.clear();
-        dataFileNameList.clear();
+        fileShortNameList.clear();
 
         for (File file : files) {
             String fileName = file.getName();
+            String fileShortName;
 
             // Add the fileName to the list
             fileNameList.add(fileName);
@@ -384,14 +429,14 @@ public class MainActivity extends AppCompatActivity {
             // Check if the file name is the same as the image file name, and add to the list
             boolean isImage = fileName.matches("(.*)IMG_[0-9]{5}.jpg(.*)");
             if (isImage){
-                imageFileNameList.add(fileName);
+
+                fileShortName = fileName.replaceAll(".jpg", ""); // get rid of the extension.
+
+                fileShortNameList.add(fileShortName);
             }
 
             // Check if the file name is the same as the data file name, and add to the list
             boolean isData = fileName.matches("(.*)IMG_[0-9]{5}.dat(.*)");
-            if (isData){
-                dataFileNameList.add(fileName);
-            }
 
             Log.i("FILE NAME", file.getName() + ", isImage: " + isImage + ", isData: " + isData);
         }
@@ -402,12 +447,12 @@ public class MainActivity extends AppCompatActivity {
 
     // Upon startup, determine the image count.
     // - Scan the working directory for all files, and find the file with the highest count.
-    // - Update the fileNameList and imageFileNameList
+    // - Update the fileShortNameList
     static private void updateImageCount(){
         Log.d("MainActivity", "updateImageCount: "+"called");
 
         // Update the List of all the files Directory.
-        updateListDirectory(storageDir);
+        updateListDirectory();
 
         int maxNumber = 0; // Init the max number to zero
 
@@ -435,5 +480,6 @@ public class MainActivity extends AppCompatActivity {
         imageCount = maxNumber;
         Log.d("MainActivity", "imageCount: " + imageCount);
     }
+
 
 }

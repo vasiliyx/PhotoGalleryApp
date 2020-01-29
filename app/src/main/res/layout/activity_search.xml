@@ -50,19 +50,20 @@
         android:id="@+id/timeStartEditText"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:padding="10dp"
         android:layout_below="@id/timeTextView"
         android:layout_centerHorizontal="true"
-        android:inputType="datetime"
-        android:textSize="18sp"
-        android:textStyle="italic"
-        android:textColor="#000"
-        android:hint="Enter Start Time"
-        android:textColorHint="#333"
+        android:autofillHints=""
         android:background="@drawable/et_rounded_style"
         android:drawableLeft="@drawable/ic_search_black_24dp"
         android:drawablePadding="10dp"
-        android:autofillHints="" />
+        android:hint="Enter Start Time"
+        android:inputType="datetime"
+        android:onClick="searchForStartTimeClick"
+        android:padding="10dp"
+        android:textColor="#000"
+        android:textColorHint="#333"
+        android:textSize="18sp"
+        android:textStyle="italic" />
 
     <EditText
         android:id="@+id/timeEndEditText"

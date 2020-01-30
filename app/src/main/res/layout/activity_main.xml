@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#222"
+    android:background="#000"
     tools:context=".MainActivity">
 
     <ImageView
@@ -38,7 +38,7 @@
         android:textStyle="italic"
         android:textColor="#000"
         android:hint="Enter a caption for your photo . . ."
-        android:textColorHint="#333"
+        android:textColorHint="#fff"
         android:background="@drawable/et_rounded_style"
         android:drawableLeft="@drawable/ic_comment_black_24dp"
         android:drawablePadding="10dp"
@@ -92,7 +92,8 @@
         android:layout_marginRight="50dp"
         android:onClick="viewPhotoClick"
         android:text="View"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:visibility="invisible"/>
 
     <Button
         android:id="@+id/unspecfiedButton"
@@ -102,7 +103,8 @@
         android:layout_alignEnd="@id/viewPhotoButton"
         android:layout_alignRight="@id/viewPhotoButton"
         android:text="Enter"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:visibility="invisible"/>
 
     <ImageButton
         android:id="@+id/leftButton"

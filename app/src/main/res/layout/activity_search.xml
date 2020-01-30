@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#000"
     tools:context=".SearchActivity">
 
     <TextView
@@ -13,8 +14,10 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
         android:text="@string/caption_based_search"
-        android:textSize="30sp"
-        android:textColor="#000"/>
+        android:fontFamily="sans-serif-medium"
+        android:textAllCaps="true"
+        android:textSize="24sp"
+        android:textColor="#fff"/>
 
     <EditText
         android:id="@+id/keywordsEditText"
@@ -27,9 +30,9 @@
         android:inputType="textCapSentences"
         android:textSize="18sp"
         android:textStyle="italic"
-        android:textColor="#000"
+        android:textColor="#eee"
         android:hint="Enter Keywords"
-        android:textColorHint="#333"
+        android:textColorHint="#eee"
         android:background="@drawable/et_rounded_style"
         android:drawableLeft="@drawable/ic_search_black_24dp"
         android:drawablePadding="10dp"
@@ -43,8 +46,10 @@
         android:layout_below="@+id/keywordsEditText"
         android:layout_marginTop="50dp"
         android:text="Time Based Search"
-        android:textSize="30sp"
-        android:textColor="#000"/>
+        android:fontFamily="sans-serif-medium"
+        android:textAllCaps="true"
+        android:textSize="24sp"
+        android:textColor="#fff"/>
 
     <EditText
         android:id="@+id/timeStartEditText"
@@ -60,8 +65,8 @@
         android:inputType="datetime"
         android:onClick="searchForStartTimeClick"
         android:padding="10dp"
-        android:textColor="#000"
-        android:textColorHint="#333"
+        android:textColor="#eee"
+        android:textColorHint="#eee"
         android:textSize="18sp"
         android:textStyle="italic" />
 
@@ -76,25 +81,42 @@
         android:inputType="datetime"
         android:textSize="18sp"
         android:textStyle="italic"
-        android:textColor="#000"
+        android:textColor="#eee"
         android:hint="Enter End Time"
-        android:textColorHint="#333"
+        android:textColorHint="#eee"
         android:background="@drawable/et_rounded_style"
         android:drawableLeft="@drawable/ic_search_black_24dp"
         android:drawablePadding="10dp"
         android:autofillHints="" />
 
+    <Button
+        android:id="@+id/searchTimeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_below="@id/timeEndEditText"
+        android:layout_alignLeft="@id/timeEndEditText"
+        android:layout_alignStart="@id/timeEndEditText"
+        android:layout_alignRight="@id/timeEndEditText"
+        android:layout_alignEnd="@id/timeEndEditText"
+        android:background="@drawable/et_rounded_button"
+        android:layout_marginTop="5dp"
+        android:text="Go"
+        android:textSize="24sp"
+        android:textColor="#FFF"
+        android:fontFamily="sans-serif-medium"
+        android:textAllCaps="true"/>
 
     <TextView
         android:id="@+id/locationTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/timeEndEditText"
+        android:layout_below="@id/searchTimeButton"
         android:layout_marginTop="50dp"
         android:text="Location Based Search"
         android:textSize="30sp"
-        android:textColor="#000"/>
+        android:textColor="#000"
+        android:visibility="invisible"/>
 
     <EditText
         android:id="@+id/topLeftEditText"
@@ -113,7 +135,8 @@
         android:background="@drawable/et_rounded_style"
         android:drawableLeft="@drawable/ic_search_black_24dp"
         android:drawablePadding="10dp"
-        android:autofillHints="" />
+        android:autofillHints=""
+        android:visibility="invisible"/>
 
     <EditText
         android:id="@+id/bottomRightEditText"
@@ -132,7 +155,8 @@
         android:background="@drawable/et_rounded_style"
         android:drawableLeft="@drawable/ic_search_black_24dp"
         android:drawablePadding="10dp"
-        android:autofillHints="" />
+        android:autofillHints=""
+        android:visibility="invisible"/>
 
 
 </RelativeLayout>

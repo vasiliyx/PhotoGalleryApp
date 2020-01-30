@@ -129,9 +129,9 @@ public class SearchActivity extends AppCompatActivity {
     }
 
 
-    // TODO RABBY: add a Search button for the Time Search.
+    // TODO RABBY: add a Search button for the Time Search. - DONE
     // TODO rename the "searchForStartTimeClick" into "searchForTimeClick" and associate it with the button.
-    // TODO RABBY: display the hint of the time stamp format (YYYY/MM/DD HH:MM:DD) or (YYYYMMDD HHMMDD)
+    // TODO RABBY: display the hint of the time stamp format (YYYY/MM/DD HH:MM:DD) or (YYYYMMDD HHMMDD) - DONE
     // TODO if wrong format was given, handle the parsing exception to prevent crash
     public void searchForStartTimeClick(View v) throws ParseException {
         Log.d("SearchActivity", "searchForStartTimeClick: called");

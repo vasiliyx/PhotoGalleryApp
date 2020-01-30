@@ -21,7 +21,7 @@
 
     <EditText
         android:id="@+id/keywordsEditText"
-        android:layout_width="350dp"
+        android:layout_width="380dp"
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:layout_centerHorizontal="true"
@@ -53,7 +53,7 @@
 
     <EditText
         android:id="@+id/timeStartEditText"
-        android:layout_width="350dp"
+        android:layout_width="380dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/timeTextView"
         android:layout_centerHorizontal="true"
@@ -61,7 +61,7 @@
         android:background="@drawable/et_rounded_style"
         android:drawableLeft="@drawable/ic_search_black_24dp"
         android:drawablePadding="10dp"
-        android:hint="Enter Start Time"
+        android:hint="Start Time: YYYYMMDD HHMMSS"
         android:inputType="datetime"
         android:onClick="searchForStartTimeClick"
         android:padding="10dp"
@@ -72,7 +72,7 @@
 
     <EditText
         android:id="@+id/timeEndEditText"
-        android:layout_width="350dp"
+        android:layout_width="380dp"
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:layout_below="@id/timeStartEditText"
@@ -82,7 +82,7 @@
         android:textSize="18sp"
         android:textStyle="italic"
         android:textColor="#eee"
-        android:hint="Enter End Time"
+        android:hint="End Time: YYYYMMDD HHMMSS"
         android:textColorHint="#eee"
         android:background="@drawable/et_rounded_style"
         android:drawableLeft="@drawable/ic_search_black_24dp"

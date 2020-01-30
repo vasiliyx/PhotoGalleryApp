@@ -25,8 +25,6 @@ public class UICaptionTest {
     public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(MainActivity.class);
     @Test
     public void ensureCaptionSearchWorks() {
-        onView(withId(R.id.takePhotoButton)).perform(click()); // opens the camera app
-        
         onView(withId(R.id.filterPhotoButton)).perform(click()); // first press the filter button
         onView(withId(R.id.keywordsEditText)).perform(typeText("router")); //type in the caption to be found and close keyboard
         onView(withId(R.id.keywordsEditText)).perform(click(), closeSoftKeyboard()); // press enter

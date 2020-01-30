@@ -22,8 +22,8 @@ import java.util.List;
 
 public class SearchActivity extends AppCompatActivity {
 
-    private EditText fromDate;
-    private EditText toDate;
+    //private EditText fromDate;
+    //private EditText toDate;
     private Calendar fromCalendar;
     private Calendar toCalendar;
     private DatePickerDialog.OnDateSetListener fromListener;
@@ -34,49 +34,46 @@ public class SearchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        fromDate = (EditText) findViewById(R.id.timeStartEditText);
-        toDate   = (EditText) findViewById(R.id.timeEndEditText);
+
+        //fromDate = (EditText) findViewById(R.id.timeStartEditText);
+        //toDate   = (EditText) findViewById(R.id.timeEndEditText);
     }
 
-
+    // ?? What is this for?
+    // TODO remove this if not needed
     public void cancel(final View view) {
         finish();
     }
 
+    // ?? What is this for?
+    // TODO remove this if not needed
     public void search(final View view) {
         Intent intent = new Intent();
-        intent.putExtra("STARTDATE", fromDate.getText().toString());
-        intent.putExtra("ENDDATE", toDate.getText().toString());
+        //intent.putExtra("STARTDATE", fromDate.getText().toString());
+        //intent.putExtra("ENDDATE", toDate.getText().toString());
         setResult(RESULT_OK, intent);
         finish();
     }
 
-
+    // When the enter button is pressed, look for the key word in all the images.
     public void searchForCaptionClick(View v) {
         Log.d("SearchActivity", "searchForCaptionClick: called");
 
         EditText keywordsEditText = (EditText) findViewById(R.id.keywordsEditText);
         String captionRef = keywordsEditText.getText().toString(); // Capture the caption string
 
-        searchForCaption(captionRef);
-
-        // TODO implement jumping into the MainActivity context. However it should not be here because we have false clicks
-
-    }
-
-    // Args: the caption string
-    // Returns the imageName
-    private void searchForCaption(String captionRef){
-        Log.d("SearchActivity", "searchForCaption: called");
-
+        // Update/Reset the list Directory
         MainActivity.updateListDirectory();
 
+        // When empty string is given, reset the search and go back
         if (captionRef == "") {
             Log.d("SearchActivity", "searchForCaption: reset search");
 
             // Display a toast of the results
             Toast.makeText(getApplicationContext(), "Reset Search", Toast.LENGTH_SHORT).show();
-            return;
+
+            // Jump back to Main Activity
+            finish();
         }
 
         // Create a local copy of the list, so that we can modify the global list
@@ -114,9 +111,6 @@ public class SearchActivity extends AppCompatActivity {
         }
 
 
-        // TODO if nothing was found
-        // ...
-
         Log.d("SearchActivity", "searchForCaption: finished search");
 
         // Display a toast of the results: how many images where found
@@ -126,14 +120,13 @@ public class SearchActivity extends AppCompatActivity {
         // Reset the display index
         MainActivity.currentlyDisplayedImageIndex = 0;
 
+        // Jump back to Main Activity
+        finish();
     }
 
 
-    // TODO RABBY: add a Search button for the Time Search. - DONE
-    // TODO rename the "searchForStartTimeClick" into "searchForTimeClick" and associate it with the button.
-    // TODO RABBY: display the hint of the time stamp format (YYYY/MM/DD HH:MM:DD) or (YYYYMMDD HHMMDD) - DONE
-    // TODO if wrong format was given, handle the parsing exception to prevent crash
-    public void searchForStartTimeClick(View v) throws ParseException {
+    // When the go button is pressed, look for matching time stamp.
+    public void searchForTimeClick(View v) throws ParseException {
         Log.d("SearchActivity", "searchForStartTimeClick: called");
 
 
@@ -145,16 +138,26 @@ public class SearchActivity extends AppCompatActivity {
 
         Log.d("SearchActivity", "searchForStartTimeClick: timeStartRef_str: " + timeStartRef_str);
 
+
         // Parse the time stamp string into the proper format
         Date timeStartRef = parseTimeStamp(timeStartRef_str);
         Date timeEndRef = parseTimeStamp(timeEndRef_str);
 
 
+        // Handle when timeStartRef and/or timeEndRef inputs are invalid
+        // If no valid start time was given, make it as early as possible
+        if (timeStartRef == null) {
+            timeStartRef = parseTimeStamp("20000101 000001");
+        }
+        // If no valid end time was given, make it as late as possible
+        if (timeEndRef == null) {
+            timeEndRef = parseTimeStamp("20990101 000001");
+        }
+
+
         // Update/Reset the list Directory
         MainActivity.updateListDirectory();
 
-        // TODO if one of the timeStartRef or timeEndRef is empty
-        // ...
 
         // Create a local copy of the list, so that we can modify the global list
         List <String> fileShortNameList_ = new ArrayList<>();
@@ -196,16 +199,27 @@ public class SearchActivity extends AppCompatActivity {
         // Reset the display index
         MainActivity.currentlyDisplayedImageIndex = 0;
 
+
+        // Jump back to Main Activity
+        finish();
     }
 
 
     // Parse the time stamp into the proper format
     // Accepted forms: yyyyMMddHHmmss, yyyy/MM/dd HH:mm:ss, yyyy.MM.dd HH.mm.ss
     // Any non digit character will be thrown away from the string
+    // If the format doesn't match, returns null
     private Date parseTimeStamp(String time_str) throws ParseException {
+        Log.d("SearchActivity", "parseTimeStamp: called: time_str " + time_str);
 
         // Convert  "1996/02/21 23:59:59" into "19960221235959"
         time_str = time_str.replaceAll("[^0-9]", ""); // Replace anything that is not a digit with nothing
+
+        // return nothing if doesn't match the format (not enough or too many digits were given)
+        if (time_str.length() != 14){
+            Log.d("SearchActivity", "parseTimeStamp: invalid entry: " + time_str );
+            return null;
+        }
 
         // Convert to the proper time format
         String pattern = "yyyyMMddHHmmss";
@@ -214,7 +228,5 @@ public class SearchActivity extends AppCompatActivity {
 
         return date;
     }
-
-
 
 }

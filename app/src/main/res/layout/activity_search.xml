@@ -63,7 +63,6 @@
         android:drawablePadding="10dp"
         android:hint="Start Time: YYYYMMDD HHMMSS"
         android:inputType="datetime"
-        android:onClick="searchForStartTimeClick"
         android:padding="10dp"
         android:textColor="#eee"
         android:textColorHint="#eee"
@@ -104,6 +103,7 @@
         android:textSize="24sp"
         android:textColor="#FFF"
         android:fontFamily="sans-serif-medium"
+        android:onClick="searchForTimeClick"
         android:textAllCaps="true"/>
 
     <TextView

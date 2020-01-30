@@ -38,6 +38,8 @@ import android.widget.TextView;
 public class MainActivity extends AppCompatActivity {
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int SEARCH_ACTIVITY = 2; // Intent Code
+
     static String myCurrentPhotoPath; // this will be updated every time a new image is taken
     static String myCurrentCaptionPath; // this will be updated every time a new image is taken
     static String myStoragePath; // this will remain the same through the program
@@ -193,10 +195,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // Creates an image file on the file system
+    // When the filter button was pressed, jump to that page.
     public void filterPhotoClick (View v) {
-        Intent intent = new Intent(this, SearchActivity.class);
-        startActivity(intent);
+        Intent searchIntent = new Intent(this, SearchActivity.class);
+        //startActivity(searchIntent);
+        startActivityForResult(searchIntent, SEARCH_ACTIVITY);
 
     }
 
@@ -247,7 +250,7 @@ public class MainActivity extends AppCompatActivity {
     public void viewPhotoClick (View v) {
 
         Log.d("MainActivity","viewPhotoClick: called");
-
+        // TODO to be implemented later
     }
 
 
@@ -365,20 +368,29 @@ public class MainActivity extends AppCompatActivity {
         Log.d("MainActivity", "onActivityResult: called");
 
         super.onActivityResult(requestCode, resultCode, data);
+
+        // If returning from Request Image Capture Intent
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Log.d("MainActivity", "onActivityResult: returned from REQUEST_IMAGE_CAPTURE");
             ImageView mImageView = (ImageView) findViewById(R.id.galleryImageView); //grab handle
             mImageView.setImageBitmap(BitmapFactory.decodeFile(myCurrentPhotoPath)); //JPEG to BITMAP (bit map has intensity at each pixel)
 
+
+            // Clear the Text Edit and Text View fields for Caption.
+            clearCaptionTextEdit();
+            clearCaptionTextView();
+
+            // Update the image count. Update the List of files. Needed for naming future naming and image preview.
+            updateImageCount();
         }
 
-        // Clear the Text Edit and Text View fields for Caption.
-        clearCaptionTextEdit();
-        clearCaptionTextView();
+        // If returning from Search Activity Intent
+        else if (requestCode == SEARCH_ACTIVITY){
+            Log.d("MainActivity", "onActivityResult: returned from SEARCH_ACTIVITY");
+            displayCurrentImage();
+        }
 
-        displayCurrentImage();
 
-        // Update the image count. Update the List of files. Needed for naming future naming and image preview.
-        updateImageCount();
         currentlyDisplayedImageIndex = fileShortNameList.size() - 1; // update the index
         Log.d("MainActivity", "onActivityResult: currentlyDisplayedImageIndex: "+ currentlyDisplayedImageIndex + ", fileShortNameList.size(): " + fileShortNameList.size());
     }

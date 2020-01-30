@@ -4,6 +4,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import androidx.test.espresso.Espresso;
+import androidx.test.espresso.action.EspressoKey;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
 
@@ -16,15 +18,20 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
+// Take a photo and labels it with a caption and then searches for that caption
 @RunWith(AndroidJUnit4.class)
 public class UICaptionTest {
     @Rule
     public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(MainActivity.class);
     @Test
     public void ensureCaptionSearchWorks() {
+        onView(withId(R.id.takePhotoButton)).perform(click()); // opens the camera app
+        
         onView(withId(R.id.filterPhotoButton)).perform(click()); // first press the filter button
-        onView(withId(R.id.keywordsEditText)).perform(typeText("router"), closeSoftKeyboard());
-        onView(withId(R.id.keywordsEditText)).perform(click());
-        onView(withId(R.id.captionTextView)).check(matches(withText("router")));
+        onView(withId(R.id.keywordsEditText)).perform(typeText("router")); //type in the caption to be found and close keyboard
+        onView(withId(R.id.keywordsEditText)).perform(click(), closeSoftKeyboard()); // press enter
+        Espresso.pressBack(); // go back to main activity
+        onView(withId(R.id.rightButton)).perform(click()); // first press the filter button
+        onView(withId(R.id.captionTextView)).check(matches(withText("router"))); // perform the comparison
     }
 }

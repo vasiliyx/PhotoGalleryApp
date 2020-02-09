@@ -96,15 +96,15 @@
         android:visibility="invisible"/>
 
     <Button
-        android:id="@+id/unspecfiedButton"
+        android:id="@+id/uploadPhotoButton"
         android:layout_width="110dp"
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/filterPhotoButton"
         android:layout_alignEnd="@id/viewPhotoButton"
         android:layout_alignRight="@id/viewPhotoButton"
-        android:text="Enter"
+        android:text="Upload"
         android:textStyle="bold"
-        android:visibility="invisible"/>
+        android:onClick="uploadPhotoClick"/>
 
     <ImageButton
         android:id="@+id/leftButton"

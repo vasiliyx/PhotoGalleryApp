@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int SEARCH_ACTIVITY = 2; // Intent Code
+    static final int SHARE_PIC_REQUEST = 3; // Sharing to social media
 
     static String myCurrentPhotoPath; // this will be updated every time a new image is taken
     static String myCurrentCaptionPath; // this will be updated every time a new image is taken
@@ -199,8 +200,7 @@ public class MainActivity extends AppCompatActivity {
     // When the filter button was pressed, jump to that page.
     public void filterPhotoClick (View v) {
         Intent searchIntent = new Intent(this, SearchActivity.class);
-        //startActivity(searchIntent);
-        startActivityForResult(searchIntent, SEARCH_ACTIVITY);
+        startActivityForResult(searchIntent, SEARCH_ACTIVITY); //parent activity is expecting int result form child activity
 
     }
 
@@ -240,20 +240,31 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void searchPhotoClick (View v) {
+    // Share image via intent to wake up social media app installed on device
+    public void uploadPhotoClick (View v) {
+        Log.d("MainActivity", "uploadPhotoClick: called");
+
+        // File path to invoke intent
+        String mPath = getApplicationInfo().dataDir;
+
+        // Create an intent type that is used to send to social media platforms
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("image/jpeg");
+        shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + mPath));
+        shareIntent.putExtra(Intent.EXTRA_TEXT, "#androidtest");
+        shareIntent.putExtra(Intent.EXTRA_TITLE, "#androidtest");
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, "#androidtest");
+        shareIntent.setPackage("Facebook");
+        startActivityForResult(Intent.createChooser(shareIntent,"ShareImageVia"), SHARE_PIC_REQUEST);
+    }
+
+    // TODO implement this later when using gridview
+    // Show all the images
+    public void viewPhotoClick (View v) {
+        Log.d("MainActivity","viewPhotoClick: called");
         Intent intent = new Intent(this, ViewPhotoActivity.class);
         startActivity(intent);
-
     }
-
-    // TODO remove this
-    // Show the particular image
-    public void viewPhotoClick (View v) {
-
-        Log.d("MainActivity","viewPhotoClick: called");
-        // TODO to be implemented later
-    }
-
 
 
     public void scrollPhotoLeftClick(View v) {
@@ -367,10 +378,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d("MainActivity", "onActivityResult: called");
-
+        //child activity sends result to cparent activity
         super.onActivityResult(requestCode, resultCode, data);
 
-        // If returning from Request Image Capture Intent
+        // If returning from Request Image Capture Intent, display the image onto the home screen
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Log.d("MainActivity", "onActivityResult: returned from REQUEST_IMAGE_CAPTURE");
             ImageView mImageView = (ImageView) findViewById(R.id.galleryImageView); //grab handle
@@ -390,7 +401,6 @@ public class MainActivity extends AppCompatActivity {
             Log.d("MainActivity", "onActivityResult: returned from SEARCH_ACTIVITY");
             displayCurrentImage();
         }
-
 
         currentlyDisplayedImageIndex = fileShortNameList.size() - 1; // update the index
         Log.d("MainActivity", "onActivityResult: currentlyDisplayedImageIndex: "+ currentlyDisplayedImageIndex + ", fileShortNameList.size(): " + fileShortNameList.size());

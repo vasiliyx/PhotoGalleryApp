@@ -23,16 +23,17 @@
         android:id="@+id/keywordsEditText"
         android:layout_width="380dp"
         android:layout_height="wrap_content"
-        android:padding="10dp"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/keywordsTextView"
         android:layout_marginTop="5dp"
+        android:padding="10dp"
         android:inputType="textCapSentences"
         android:textSize="18sp"
         android:textStyle="italic"
         android:textColor="#eee"
         android:hint="Enter Keywords"
         android:textColorHint="#eee"
+        android:autofillHints=""
         android:background="@drawable/et_rounded_style"
         android:drawableLeft="@drawable/ic_search_black_24dp"
         android:drawablePadding="10dp"
@@ -57,36 +58,38 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/timeTextView"
         android:layout_centerHorizontal="true"
+        android:padding="10dp"
+        android:inputType=""
+        android:textSize="18sp"
+        android:textStyle="italic"
+        android:textColor="#eee"
+        android:hint="Start Time: YYYYMMDD HHMMSS"
         android:autofillHints=""
+        android:textColorHint="#eee"
         android:background="@drawable/et_rounded_style"
         android:drawableLeft="@drawable/ic_search_black_24dp"
-        android:drawablePadding="10dp"
-        android:hint="Start Time: YYYYMMDD HHMMSS"
-        android:inputType="datetime"
-        android:padding="10dp"
-        android:textColor="#eee"
-        android:textColorHint="#eee"
-        android:textSize="18sp"
-        android:textStyle="italic" />
+        android:drawablePadding="10dp"/>
 
     <EditText
         android:id="@+id/timeEndEditText"
         android:layout_width="380dp"
         android:layout_height="wrap_content"
-        android:padding="10dp"
         android:layout_below="@id/timeStartEditText"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
+        android:padding="10dp"
         android:inputType="datetime"
         android:textSize="18sp"
         android:textStyle="italic"
         android:textColor="#eee"
         android:hint="End Time: YYYYMMDD HHMMSS"
         android:textColorHint="#eee"
+        android:autofillHints=""
         android:background="@drawable/et_rounded_style"
         android:drawableLeft="@drawable/ic_search_black_24dp"
         android:drawablePadding="10dp"
-        android:autofillHints="" />
+         />
+
 
     <Button
         android:id="@+id/searchTimeButton"
@@ -110,33 +113,33 @@
         android:id="@+id/locationTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_below="@id/searchTimeButton"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
+        android:fontFamily="sans-serif-medium"
+        android:textAllCaps="true"
         android:text="Location Based Search"
-        android:textSize="30sp"
-        android:textColor="#000"
-        android:visibility="invisible"/>
+        android:textColor="#fff"
+        android:textSize="24sp"/>
 
     <EditText
         android:id="@+id/topLeftEditText"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:padding="10dp"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/locationTextView"
         android:layout_marginTop="5dp"
+        android:padding="10dp"
         android:inputType="textCapSentences"
         android:textSize="18sp"
         android:textStyle="italic"
-        android:textColor="#000"
+        android:textColor="#eee"
         android:hint="Enter Top Left Corner"
-        android:textColorHint="#333"
+        android:textColorHint="#eee"
+        android:autofillHints=""
         android:background="@drawable/et_rounded_style"
         android:drawableLeft="@drawable/ic_search_black_24dp"
-        android:drawablePadding="10dp"
-        android:autofillHints=""
-        android:visibility="invisible"/>
+        android:drawablePadding="10dp" />
 
     <EditText
         android:id="@+id/bottomRightEditText"
@@ -149,14 +152,13 @@
         android:inputType="textCapSentences"
         android:textSize="18sp"
         android:textStyle="italic"
-        android:textColor="#000"
+        android:textColor="#eee"
         android:hint="Enter Bottom Right Corner"
-        android:textColorHint="#333"
+        android:textColorHint="#eee"
         android:background="@drawable/et_rounded_style"
         android:drawableLeft="@drawable/ic_search_black_24dp"
         android:drawablePadding="10dp"
-        android:autofillHints=""
-        android:visibility="invisible"/>
+        android:autofillHints="" />
 
 
 </RelativeLayout>

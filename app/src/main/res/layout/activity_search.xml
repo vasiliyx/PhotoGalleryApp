@@ -124,7 +124,7 @@
 
     <EditText
         android:id="@+id/topLeftEditText"
-        android:layout_width="350dp"
+        android:layout_width="380dp"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/locationTextView"
@@ -143,7 +143,7 @@
 
     <EditText
         android:id="@+id/bottomRightEditText"
-        android:layout_width="350dp"
+        android:layout_width="380dp"
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:layout_centerHorizontal="true"
@@ -159,6 +159,24 @@
         android:drawableLeft="@drawable/ic_search_black_24dp"
         android:drawablePadding="10dp"
         android:autofillHints="" />
+
+    <Button
+        android:id="@+id/searchLocationButton"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_below="@id/bottomRightEditText"
+        android:layout_alignLeft="@id/bottomRightEditText"
+        android:layout_alignStart="@id/bottomRightEditText"
+        android:layout_alignRight="@id/bottomRightEditText"
+        android:layout_alignEnd="@id/bottomRightEditText"
+        android:background="@drawable/et_rounded_button"
+        android:layout_marginTop="5dp"
+        android:text="Go"
+        android:textSize="24sp"
+        android:textColor="#FFF"
+        android:fontFamily="sans-serif-medium"
+        android:onClick="searchForLocationClick"
+        android:textAllCaps="true"/>
 
 
 </RelativeLayout>

@@ -263,7 +263,7 @@ public class MainActivity extends AppCompatActivity {
         share.putExtra(Intent.EXTRA_TITLE,"Sent you a title" );
         share.putExtra(Intent.EXTRA_SUBJECT,"Sent you a subject" );
 //        share.setPackage(packageName); //comment this out if you want to share via any app
-        startActivityForResult(Intent.createChooser(share, "Share Image Via Another Application"),SHARE_PIC_REQUEST);
+        startActivityForResult(Intent.createChooser(share, "Share The Image Via"),SHARE_PIC_REQUEST);
     }
 
     // Check to see if Social Media Application is installed

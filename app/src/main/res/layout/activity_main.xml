@@ -56,8 +56,8 @@
     <Button
         android:id="@+id/takePhotoButton"
         android:layout_width="110dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/captionEditText"
+        android:layout_height="50dp"
+        android:layout_below="@+id/captionEditText"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_marginStart="50dp"
@@ -72,39 +72,46 @@
     <Button
         android:id="@+id/filterPhotoButton"
         android:layout_width="110dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/takePhotoButton"
-        android:layout_alignLeft="@id/takePhotoButton"
+        android:layout_height="50dp"
+        android:layout_below="@+id/takePhotoButton"
+        android:layout_alignStart="@+id/takePhotoButton"
+        android:layout_alignLeft="@+id/takePhotoButton"
         android:layout_marginTop="15dp"
         android:onClick="filterPhotoClick"
         android:text="Filter"
         android:textStyle="bold"
-        android:drawableLeft="@drawable/ic_search_black_24dp"/>
+        android:drawableLeft="@drawable/ic_search_black_24dp"
+        android:drawablePadding="3dp"/>
 
     <Button
         android:id="@+id/viewPhotoButton"
         android:layout_width="110dp"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@id/takePhotoButton"
+        android:layout_height="50dp"
+        android:layout_below="@+id/captionEditText"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_marginEnd="50dp"
         android:layout_marginRight="50dp"
+        android:layout_marginTop="15dp"
         android:onClick="viewPhotoClick"
         android:text="View"
         android:textStyle="bold"
+        android:drawablePadding="3dp"
         android:visibility="invisible"/>
 
     <Button
         android:id="@+id/uploadPhotoButton"
         android:layout_width="110dp"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@id/filterPhotoButton"
-        android:layout_alignEnd="@id/viewPhotoButton"
-        android:layout_alignRight="@id/viewPhotoButton"
+        android:layout_height="50dp"
+        android:layout_below="@+id/viewPhotoButton"
+        android:layout_alignEnd="@+id/viewPhotoButton"
+        android:layout_alignRight="@+id/viewPhotoButton"
+        android:layout_marginTop="15dp"
+        android:onClick="uploadPhotoClick"
         android:text="Upload"
         android:textStyle="bold"
-        android:onClick="uploadPhotoClick"/>
+        android:drawableRight="@drawable/ic_share_black_24dp"
+        android:drawablePadding="3dp"/>
 
     <ImageButton
         android:id="@+id/leftButton"
@@ -126,8 +133,5 @@
         android:layout_alignEnd="@id/viewPhotoButton"
         android:layout_alignRight="@id/viewPhotoButton"
         android:onClick="scrollPhotoRightClick" />
-
- />
-
 
 </RelativeLayout>

@@ -19,6 +19,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import java.io.BufferedWriter;
@@ -36,6 +37,7 @@ import java.util.List;
 import android.widget.EditText;
 
 import android.widget.TextView;
+import android.widget.Toast;
 
 import javax.security.auth.login.LoginException;
 
@@ -263,7 +265,23 @@ public class MainActivity extends AppCompatActivity {
         share.putExtra(Intent.EXTRA_TITLE,"Sent you a title" );
         share.putExtra(Intent.EXTRA_SUBJECT,"Sent you a subject" );
 //        share.setPackage(packageName); //comment this out if you want to share via any app
+
+        // todo ask tej how he wants the upload button to be disabled
+        // Change what the upload button reads and notify the user the upload processing has begun
+        final Button uploadPhotoButton = findViewById(R.id.uploadPhotoButton);
+        uploadPhotoButton.setEnabled(false);
+        Toast.makeText(this, "Uploading...", Toast.LENGTH_SHORT).show();
+        uploadPhotoButton.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                uploadPhotoButton.setEnabled(true);
+            }
+        }, 5000);
+
         startActivityForResult(Intent.createChooser(share, "Share The Image Via"),SHARE_PIC_REQUEST);
+
+//        uploadPhotoButton.setEnabled(true);
+//        Toast.makeText(this, "Uploaded", Toast.LENGTH_SHORT).show();
     }
 
     // Check to see if Social Media Application is installed

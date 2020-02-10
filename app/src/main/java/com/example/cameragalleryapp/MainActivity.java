@@ -7,6 +7,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
@@ -36,6 +37,8 @@ import android.widget.EditText;
 
 import android.widget.TextView;
 
+import javax.security.auth.login.LoginException;
+
 public class MainActivity extends AppCompatActivity {
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -48,7 +51,6 @@ public class MainActivity extends AppCompatActivity {
 
     static List <String> fileNameList  = new ArrayList<String>(); // List of all the files in the directory (including the image and caption files)
     static List <String> fileShortNameList = new ArrayList<String>(); // List of all names of the image without the extension
-
 
     static File storageDir; // Working directory path
 
@@ -77,9 +79,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Determine the current image count
         updateImageCount();
-
         displayDefaultImage();
-
 
         Log.d("MainActivity", "onCreate: myStoragePath: " + myStoragePath);
     }
@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
     // This method is used at the start up and/or when there are no images in the list
     private void displayDefaultImage(){
         ImageView galleryImageView = (ImageView) findViewById(R.id.galleryImageView);
-        galleryImageView.setImageResource(R.drawable.ic_launcher_background);
+        galleryImageView.setImageResource(R.drawable.ic_launcher_background); //todo change this to something nicer
 
     }
 
@@ -204,8 +204,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
-
     // This will create an image file as well as the caption file
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public File createImageFile() throws IOException {
@@ -228,7 +226,6 @@ public class MainActivity extends AppCompatActivity {
         Log.d("MainActivity", "createImageFile: myCurrentPhotoPath: "+ myCurrentPhotoPath);
         Log.d("MainActivity", "createImageFile: myCurrentCaptionPath: "+ myCurrentCaptionPath);
 
-
         // Create a data file on the file system associated with the image
         ImageData myImageData = new ImageData();
         myImageData.caption = "";
@@ -244,19 +241,33 @@ public class MainActivity extends AppCompatActivity {
     public void uploadPhotoClick (View v) {
         Log.d("MainActivity", "uploadPhotoClick: called");
 
+        // Check if app is installed
+        String packageName = "com.facebook.katana"; //facebook app package name (not messenger)
+        final boolean packageInstalled = isPackageInstalled(packageName, this);
+        Log.i("MainActivity", "uploadPhotoClick: Package installed = " + packageInstalled);
+
         // File path to invoke intent
-        String mPath = getApplicationInfo().dataDir;
+        String mPath = myCurrentPhotoPath;
 
         // Create an intent type that is used to send to social media platforms
-        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        shareIntent.setType("image/jpeg");
-        shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + mPath));
-        shareIntent.putExtra(Intent.EXTRA_TEXT, "#androidtest");
-        shareIntent.putExtra(Intent.EXTRA_TITLE, "#androidtest");
-        shareIntent.putExtra(Intent.EXTRA_SUBJECT, "#androidtest");
-        shareIntent.setPackage("Facebook");
-        startActivityForResult(Intent.createChooser(shareIntent,"ShareImageVia"), SHARE_PIC_REQUEST);
+        Intent share = new Intent(Intent.ACTION_SEND);
+        share.setType("image/jpeg");
+        share.putExtra(Intent.EXTRA_STREAM,Uri.parse("file://" + mPath));
+        share.setPackage(packageName);
+        startActivityForResult(Intent.createChooser(share, "Share Image Via"),SHARE_PIC_REQUEST);
     }
+
+    // Check to see if Social Media Application is installed
+    private boolean isPackageInstalled(String packageName, Context context) {
+        PackageManager pm = context.getPackageManager();
+        try {
+            pm.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
+    }
+
 
     // TODO implement this later when using gridview
     // Show all the images
@@ -378,7 +389,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d("MainActivity", "onActivityResult: called");
-        //child activity sends result to cparent activity
+        //child activity sends result to parent activity
         super.onActivityResult(requestCode, resultCode, data);
 
         // If returning from Request Image Capture Intent, display the image onto the home screen
@@ -386,7 +397,6 @@ public class MainActivity extends AppCompatActivity {
             Log.d("MainActivity", "onActivityResult: returned from REQUEST_IMAGE_CAPTURE");
             ImageView mImageView = (ImageView) findViewById(R.id.galleryImageView); //grab handle
             mImageView.setImageBitmap(BitmapFactory.decodeFile(myCurrentPhotoPath)); //JPEG to BITMAP (bit map has intensity at each pixel)
-
 
             // Clear the Text Edit and Text View fields for Caption.
             clearCaptionTextEdit();

@@ -130,7 +130,6 @@ public class MainActivity extends AppCompatActivity {
         Debug.printList("fileShortNameList", fileShortNameList);
 
         // Load the data object associated to the image
-
         String dataFileName = fileShortNameList.get(currentlyDisplayedImageIndex) + ".dat";
         ImageData myImageData_ = null; // create an empty instance to hold the data
         myImageData_ = (ImageData) Pickle.load(myImageData_, storageDir + "/" + dataFileName);
@@ -236,7 +235,7 @@ public class MainActivity extends AppCompatActivity {
         return image;
     }
 
-
+    // todo need to include the caption that comes with the image
     // Share image via intent to wake up social media app installed on device
     public void uploadPhotoClick (View v) {
         Log.d("MainActivity", "uploadPhotoClick: called");
@@ -246,15 +245,25 @@ public class MainActivity extends AppCompatActivity {
         final boolean packageInstalled = isPackageInstalled(packageName, this);
         Log.i("MainActivity", "uploadPhotoClick: Package installed = " + packageInstalled);
 
+        // todo consider making the file path global
         // File path to invoke intent
-        String mPath = myCurrentPhotoPath;
+        String imageFileName = fileShortNameList.get(currentlyDisplayedImageIndex) + ".jpg";
+        String mPath = myStoragePath + "/" + imageFileName;
 
-        // Create an intent type that is used to send to social media platforms
+        // todo consider making 'caption' a global variable
+//        EditText captionEditText = (EditText) findViewById(R.id.captionEditText);
+//        TextView captionTextView = (TextView) findViewById(R.id.captionTextView);
+//        String caption = captionEditText.getText().toString(); // Capture the caption string
+
+        // Create an intent type that is used to send to social media platforms or any other app
         Intent share = new Intent(Intent.ACTION_SEND);
-        share.setType("image/jpeg");
-        share.putExtra(Intent.EXTRA_STREAM,Uri.parse("file://" + mPath));
-        share.setPackage(packageName);
-        startActivityForResult(Intent.createChooser(share, "Share Image Via"),SHARE_PIC_REQUEST);
+        share.setType("image/jpeg"); //default image type
+        share.putExtra(Intent.EXTRA_STREAM,Uri.parse(mPath)); //parse the string to include only file path
+        share.putExtra(Intent.EXTRA_TEXT, "I sent you an image, here is the text."); //on Whatsapp, this is seen under the image
+        share.putExtra(Intent.EXTRA_TITLE,"Sent you a title" );
+        share.putExtra(Intent.EXTRA_SUBJECT,"Sent you a subject" );
+//        share.setPackage(packageName); //comment this out if you want to share via any app
+        startActivityForResult(Intent.createChooser(share, "Share Image Via Another Application"),SHARE_PIC_REQUEST);
     }
 
     // Check to see if Social Media Application is installed
@@ -432,8 +441,6 @@ public class MainActivity extends AppCompatActivity {
 
         return number_str;
     }
-
-
 
     // Update the list of all the files in the specified directory
     // Args: Directory path

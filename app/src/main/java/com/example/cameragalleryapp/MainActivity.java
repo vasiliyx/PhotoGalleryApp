@@ -1,6 +1,7 @@
 //this file will get overwritten after GPS is done
 package com.example.cameragalleryapp;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -11,6 +12,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
@@ -65,6 +69,22 @@ public class MainActivity extends AppCompatActivity {
     private static final int CAMERA_PERMISSION_CODE = 100;
     private static final int STORAGE_PERMISSION_CODE = 101;
 
+    // GPS objects //todo fill details in here
+    LocationManager locationManager;
+    LocationListener locationListener;
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        // If permission is granted then attempting to use GPS //todo ask tej about how it exactly works
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+            }
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d("MainActivity", "onCreate: called");
@@ -78,13 +98,43 @@ public class MainActivity extends AppCompatActivity {
         // Get storage path
         storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         myStoragePath = storageDir.getAbsolutePath();
+        Log.d("MainActivity", "onCreate: myStoragePath: " + myStoragePath);
 
         // Determine the current image count
         updateImageCount();
         displayDefaultImage();
 
-        Log.d("MainActivity", "onCreate: myStoragePath: " + myStoragePath);
-    }
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                Log.i("Location", location.toString());
+            }
+
+            @Override
+            public void onStatusChanged(String s, int i, Bundle bundle) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String s) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String s) {
+
+            }
+        };
+
+        // Checks if permission is granted, if not it will default and ask for permission
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        }
+        else
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+
+    }//onCreate end
 
     // Displays an empty image or some default image.
     // This method is used at the start up and/or when there are no images in the list

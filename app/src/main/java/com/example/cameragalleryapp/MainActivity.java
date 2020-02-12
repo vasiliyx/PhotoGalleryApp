@@ -7,8 +7,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
-
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
@@ -21,10 +22,15 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.Settings;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -37,13 +43,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-
-import android.widget.EditText;
-
-import android.widget.TextView;
-import android.widget.Toast;
-
 import javax.security.auth.login.LoginException;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -73,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
     LocationManager locationManager;
     LocationListener locationListener;
 
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -84,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
         updateImageCount();
         displayDefaultImage();
 
+        // Location services object and listener
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         locationListener = new LocationListener() {
             @Override
@@ -127,14 +131,39 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        // Checks if permission is granted, if not it will default and ask for permission
+        // Checks if permission is granted, if not it will default and take permission
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
         else
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
 
+        // If location disabled, will alert user to enable location
+        // It will redirect to the settings page, where user manually turns it on
+        if (!(locationManager.isProviderEnabled((LocationManager.GPS_PROVIDER)))) {
+//            Intent gpsOptionsIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            builder.setTitle("Location Settings");
+            builder.setMessage(Html.fromHtml("<font color='#101010'>Please enable location.</font>")); //changes the text color too
+//            builder.setIcon(xml)
+            builder.setCancelable(false);
+            builder.setPositiveButton(Html.fromHtml("<font color='#f23933'>OK</font>"), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int i) {
+                            // Launch settings activity
+                            startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                        }
+                    });
+            builder.setNegativeButton(Html.fromHtml("<font color='#222322'>Cancel</font>"), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int i) {
+                            dialog.cancel();
+                        }
+                    });
+            builder.create().show();
+        }
     }//onCreate end
+
 
     // Displays an empty image or some default image.
     // This method is used at the start up and/or when there are no images in the list
@@ -143,6 +172,7 @@ public class MainActivity extends AppCompatActivity {
         galleryImageView.setImageResource(R.drawable.ic_launcher_background); //todo change this to something nicer
 
     }
+
 
     // Displays/updates the image on the screen using the currentlyDisplayedImageIndex
     // If no images exist it will display the default image
@@ -196,6 +226,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
     // Function to check and request permission.
     // TODO figure the permisions out: how to request them in case they've been revoked
     public void checkPermission(String permission, int requestCode)
@@ -248,12 +279,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
     // When the filter button was pressed, jump to that page.
     public void filterPhotoClick (View v) {
         Intent searchIntent = new Intent(this, SearchActivity.class);
         startActivityForResult(searchIntent, SEARCH_ACTIVITY); //parent activity is expecting int result form child activity
 
     }
+
 
     // This will create an image file as well as the caption file
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -286,6 +319,7 @@ public class MainActivity extends AppCompatActivity {
         // Image count will be determined after the files are created in the file system
         return image;
     }
+
 
     // todo need to include the caption that comes with the image
     // Share image via intent to wake up social media app installed on device
@@ -333,6 +367,7 @@ public class MainActivity extends AppCompatActivity {
 //        uploadPhotoButton.setEnabled(true);
 //        Toast.makeText(this, "Uploaded", Toast.LENGTH_SHORT).show();
     }
+
 
     // Check to see if Social Media Application is installed
     private boolean isPackageInstalled(String packageName, Context context) {
@@ -387,6 +422,7 @@ public class MainActivity extends AppCompatActivity {
         clearCaptionTextEdit();
     }
 
+
     public void scrollPhotoRightClick (View v) {
         Log.d("MainActivity","scrollPhotoRightClick: called");
 
@@ -419,6 +455,7 @@ public class MainActivity extends AppCompatActivity {
         clearCaptionTextEdit();
     }
 
+
     // Display/update the caption on the screen.
     // - Load the data from the file for the corresponding viewing image
     // - Show the caption on the screen.
@@ -443,6 +480,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
     // Clear the Text Edit field for Caption. User should have an empty box to start typing in.
     // Needed when user entered the text edit and then moves on to another photo and put a caption there
     private void clearCaptionTextEdit() {
@@ -461,6 +499,7 @@ public class MainActivity extends AppCompatActivity {
         TextView captionTextView = (TextView) findViewById(R.id.captionTextView);
         captionTextView.setText("");
     }
+
 
     // When coming back from another activity
     @Override
@@ -509,6 +548,7 @@ public class MainActivity extends AppCompatActivity {
 
         return number_str;
     }
+
 
     // Update the list of all the files in the specified directory
     // Args: Directory path
@@ -584,7 +624,6 @@ public class MainActivity extends AppCompatActivity {
             maxNumber = Math.max(maxNumber, number);
 
         }
-
         imageCount = maxNumber;
         Log.d("MainActivity", "imageCount: " + imageCount);
     }

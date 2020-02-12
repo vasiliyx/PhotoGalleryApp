@@ -1,4 +1,4 @@
-//this file will get overwritten after GPS is done
+//todo the GPS prints successful in info
 package com.example.cameragalleryapp;
 
 import androidx.annotation.NonNull;

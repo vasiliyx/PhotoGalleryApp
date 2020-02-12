@@ -1,3 +1,4 @@
+//this file will get overwritten after GPS is done
 package com.example.cameragalleryapp;
 
 import androidx.annotation.RequiresApi;

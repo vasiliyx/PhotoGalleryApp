@@ -294,12 +294,6 @@ public class SearchActivity extends AppCompatActivity {
                 MainActivity.fileShortNameList.add(fileShortName);
             }//end if
 
-//            // bottomRightLatRef < locationStampLatFile < topLeftLatRef
-//            if (topLeftLatRef.compareTo(locationStampLatFile_str) > 0 &&      // (topLeftLatRef - locationStampLatFile) > 0
-//                    locationStampLatFile_str.compareTo(bottomRightLatRef) > 0){  // (locationStampLatFile - bottomRightLatRef) > 0
-//                Log.d("SearchActivity", "Found: " + fileShortName);
-//                MainActivity.fileShortNameList.add(fileShortName);
-//            }
         }//end for
 
             Log.d("SearchActivity", "searchForLocation: finished search");

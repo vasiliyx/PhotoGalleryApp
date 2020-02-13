@@ -3,4 +3,14 @@
     <string name="snap">snap</string>
     <string name="todo">TODO</string>
     <string name="caption_based_search">Caption Based Search</string>
+    <string name="go">Go</string>
+    <string name="enter_latitude">Enter Latitude</string>
+    <string name="enter_keywords">Enter Keywords</string>
+    <string name="time_based_search">Time Based Search</string>
+    <string name="start_time_yyyymmdd_hhmmss">Start Time: YYYYMMDD HHMMSS</string>
+    <string name="end_time_yyyymmdd_hhmmss">End Time: YYYYMMDD HHMMSS</string>
+    <string name="location_based_search">Location Based Search</string>
+    <string name="top_left_coordinates">Top Left Coordinates</string>
+    <string name="enter_longitude">Enter Longitude</string>
+    <string name="bottom_right_coordinates">Bottom Right Coordinates</string>
 </resources>

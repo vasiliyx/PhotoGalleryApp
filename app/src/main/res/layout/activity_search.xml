@@ -31,10 +31,11 @@
         android:textSize="18sp"
         android:textStyle="italic"
         android:textColor="#eee"
-        android:hint="Enter Keywords"
+        android:hint="@string/enter_keywords"
         android:textColorHint="#eee"
         android:autofillHints=""
         android:background="@drawable/et_rounded_style"
+        android:drawableStart="@drawable/ic_font_download_white_24dp"
         android:drawableLeft="@drawable/ic_font_download_white_24dp"
         android:drawablePadding="10dp"
         android:onClick="searchForCaptionClick" />
@@ -46,7 +47,7 @@
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/keywordsEditText"
         android:layout_marginTop="50dp"
-        android:text="Time Based Search"
+        android:text="@string/time_based_search"
         android:fontFamily="sans-serif-medium"
         android:textAllCaps="true"
         android:textSize="24sp"
@@ -63,10 +64,11 @@
         android:textSize="18sp"
         android:textStyle="italic"
         android:textColor="#eee"
-        android:hint="Start Time: YYYYMMDD HHMMSS"
+        android:hint="@string/start_time_yyyymmdd_hhmmss"
         android:autofillHints=""
         android:textColorHint="#eee"
         android:background="@drawable/et_rounded_style"
+        android:drawableStart="@drawable/ic_date_range_white_24dp"
         android:drawableLeft="@drawable/ic_date_range_white_24dp"
         android:drawablePadding="10dp"/>
 
@@ -82,10 +84,11 @@
         android:textSize="18sp"
         android:textStyle="italic"
         android:textColor="#eee"
-        android:hint="End Time: YYYYMMDD HHMMSS"
+        android:hint="@string/end_time_yyyymmdd_hhmmss"
         android:textColorHint="#eee"
         android:autofillHints=""
         android:background="@drawable/et_rounded_style"
+        android:drawableStart="@drawable/ic_date_range_white_24dp"
         android:drawableLeft="@drawable/ic_date_range_white_24dp"
         android:drawablePadding="10dp" />
 
@@ -101,7 +104,7 @@
         android:layout_alignEnd="@id/timeEndEditText"
         android:layout_marginTop="5dp"
         android:background="@drawable/et_rounded_button"
-        android:text="Go"
+        android:text="@string/go"
         android:textSize="24sp"
         android:textColor="#FFF"
         android:fontFamily="sans-serif-medium"
@@ -117,7 +120,7 @@
         android:layout_marginTop="50dp"
         android:fontFamily="sans-serif-medium"
         android:textAllCaps="true"
-        android:text="Location Based Search"
+        android:text="@string/location_based_search"
         android:textColor="#fff"
         android:textSize="24sp"/>
 
@@ -129,7 +132,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
         android:fontFamily="sans-serif"
-        android:text="Top Left Coordinates"
+        android:text="@string/top_left_coordinates"
         android:textColor="#fff"
         android:textSize="15sp"/>
 
@@ -146,10 +149,11 @@
         android:textSize="18sp"
         android:textStyle="italic"
         android:textColor="#eee"
-        android:hint="Enter Latitude"
+        android:hint="@string/enter_latitude"
         android:textColorHint="#eee"
         android:autofillHints=""
         android:background="@drawable/et_rounded_style"
+        android:drawableStart="@drawable/ic_location_on_white_24dp"
         android:drawableLeft="@drawable/ic_location_on_white_24dp"
         android:drawablePadding="10dp" />
 
@@ -166,10 +170,11 @@
         android:textSize="18sp"
         android:textStyle="italic"
         android:textColor="#eee"
-        android:hint="Enter Longitude"
+        android:hint="@string/enter_longitude"
         android:textColorHint="#eee"
         android:autofillHints=""
         android:background="@drawable/et_rounded_style"
+        android:drawableStart="@drawable/ic_location_on_white_24dp"
         android:drawableLeft="@drawable/ic_location_on_white_24dp"
         android:drawablePadding="10dp" />
 
@@ -181,7 +186,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
         android:fontFamily="sans-serif"
-        android:text="Bottom Right Coordinates"
+        android:text="@string/bottom_right_coordinates"
         android:textColor="#fff"
         android:textSize="15sp"/>
 
@@ -198,10 +203,11 @@
         android:textSize="18sp"
         android:textStyle="italic"
         android:textColor="#eee"
-        android:hint="Enter Latitude"
+        android:hint="@string/enter_latitude"
         android:textColorHint="#eee"
         android:autofillHints=""
         android:background="@drawable/et_rounded_style"
+        android:drawableStart="@drawable/ic_location_on_white_24dp"
         android:drawableLeft="@drawable/ic_location_on_white_24dp"
         android:drawablePadding="10dp" />
 
@@ -218,10 +224,11 @@
         android:textSize="18sp"
         android:textStyle="italic"
         android:textColor="#eee"
-        android:hint="Enter Latitude"
+        android:hint="@string/enter_latitude"
         android:textColorHint="#eee"
         android:autofillHints=""
         android:background="@drawable/et_rounded_style"
+        android:drawableStart="@drawable/ic_location_on_white_24dp"
         android:drawableLeft="@drawable/ic_location_on_white_24dp"
         android:drawablePadding="10dp" />
 
@@ -236,7 +243,7 @@
         android:layout_alignEnd="@id/bottomRightLongEditText"
         android:layout_marginTop="5dp"
         android:background="@drawable/et_rounded_button"
-        android:text="Go"
+        android:text="@string/go"
         android:textSize="24sp"
         android:textColor="#FFF"
         android:fontFamily="sans-serif-medium"

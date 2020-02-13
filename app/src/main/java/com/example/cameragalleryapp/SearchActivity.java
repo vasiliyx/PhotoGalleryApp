@@ -227,16 +227,15 @@ public class SearchActivity extends AppCompatActivity {
     public void searchForLocationClick(View v) throws ParseException {
         Log.d("SearchActivity", "searchForLocationClick: called");
 
-        // Capture the user input and convert into string
+        // Capture the coordinate inputs and convert into doubles
         EditText topLeftLatEditText = (EditText) findViewById(R.id.topLeftLatEditText);
         EditText topLeftLongEditText = (EditText) findViewById(R.id.topLeftLongEditText);
         EditText bottomRightLatEditText = (EditText) findViewById(R.id.bottomRightLatEditText);
         EditText bottomRightLongEditText = (EditText) findViewById(R.id.bottomRightLongEditText);
-        String topLeftLatRef = topLeftLatEditText.getText().toString();
-        String topLeftLongRef = topLeftLongEditText.getText().toString();
-        String bottomRightLatRef = bottomRightLatEditText.getText().toString();
-        String bottomRightLongRef = bottomRightLongEditText.getText().toString();
-
+        Double topLeftLatRef = parseDouble(topLeftLatEditText.getText().toString());
+        Double topLeftLongRef = parseDouble(topLeftLongEditText.getText().toString());
+        Double bottomRightLatRef = parseDouble(bottomRightLatEditText.getText().toString());
+        Double bottomRightLongRef = parseDouble(bottomRightLongEditText.getText().toString());
         Log.d("SearchActivity", "searchForLocationClick: topLeftLatRef: " + topLeftLatRef);
         Log.d("SearchActivity", "searchForLocationClick: topLeftLongRef: " + topLeftLongRef);
         Log.d("SearchActivity", "searchForLocationClick: bottomRightLatRef: " + bottomRightLatRef);
@@ -246,22 +245,22 @@ public class SearchActivity extends AppCompatActivity {
 //        Date timeStartRef = parseTimeStamp(timeStartRef_str);
 //        Date timeEndRef = parseTimeStamp(timeEndRef_str);
 
-        // Handle when inputs are invalid
-        // If no valid location was given, make it top left corner
-        if (topLeftLatRef == "") {
-            topLeftLatRef = "85";
-        }
-        if (topLeftLongRef == "") {
-            topLeftLongRef = "-180";
-        }
-
-        // If no valid location was given, make it bottom right corner
-        if (bottomRightLatRef == "") {
-            bottomRightLatRef = "-85";
-        }
-        if (bottomRightLongRef == "") {
-            bottomRightLongRef = "180";
-        }
+//        // Handle when inputs are invalid
+//        // If no valid location was given, make it top left corner
+//        if (topLeftLatRef == "") {
+//            topLeftLatRef = "85";
+//        }
+//        if (topLeftLongRef == "") {
+//            topLeftLongRef = "-180";
+//        }
+//
+//        // If no valid location was given, make it bottom right corner
+//        if (bottomRightLatRef == "") {
+//            bottomRightLatRef = "-85";
+//        }
+//        if (bottomRightLongRef == "") {
+//            bottomRightLongRef = "180";
+//        }
 
         // Update/Reset the list Directory
         MainActivity.updateListDirectory();
@@ -285,16 +284,22 @@ public class SearchActivity extends AppCompatActivity {
             // Obtain the caption data from the object
             String locationStampLatFile_str = myImageData_.locationStampLat;
             String locationStampLongFile_str = myImageData_.locationStampLong;
-//            Double locationStampLatFile = parseDouble(locationStampLatFile_str);
-//            Double locationStampLongFile = parseDouble(locationStampLongFile_str);
+            Double locationStampLatFile = parseDouble(locationStampLatFile_str);
+            Double locationStampLongFile = parseDouble(locationStampLongFile_str);
 
             // Check that the location stamp is within the specified limits
-            // bottomRightLatRef < locationStampLatFile < topLeftLatRef
-            if (topLeftLatRef.compareTo(locationStampLatFile_str) > 0 &&      // (topLeftLatRef - locationStampLatFile) > 0
-                    locationStampLatFile_str.compareTo(bottomRightLatRef) > 0){  // (locationStampLatFile - bottomRightLatRef) > 0
+            if ((locationStampLatFile < topLeftLatRef && locationStampLatFile > bottomRightLatRef) && //top left: lat = 85, long = -180
+                locationStampLongFile < bottomRightLongRef && locationStampLongFile > topLeftLongRef) { //bottom right: lat = -85, long = 180
                 Log.d("SearchActivity", "Found: " + fileShortName);
                 MainActivity.fileShortNameList.add(fileShortName);
-            }
+            }//end if
+
+//            // bottomRightLatRef < locationStampLatFile < topLeftLatRef
+//            if (topLeftLatRef.compareTo(locationStampLatFile_str) > 0 &&      // (topLeftLatRef - locationStampLatFile) > 0
+//                    locationStampLatFile_str.compareTo(bottomRightLatRef) > 0){  // (locationStampLatFile - bottomRightLatRef) > 0
+//                Log.d("SearchActivity", "Found: " + fileShortName);
+//                MainActivity.fileShortNameList.add(fileShortName);
+//            }
         }//end for
 
             Log.d("SearchActivity", "searchForLocation: finished search");

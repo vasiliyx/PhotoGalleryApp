@@ -20,6 +20,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import static java.lang.Double.parseDouble;
+
 
 public class SearchActivity extends AppCompatActivity {
 
@@ -129,13 +131,16 @@ public class SearchActivity extends AppCompatActivity {
         Log.d("SearchActivity", "searchForStartTimeClick: called");
 
         // Capture the user input and convert into string
-        String timeEndRef_str = findViewById(R.id.timeEndEditText).toString();
-        String timeStartRef_str = findViewById(R.id.timeStartEditText).toString();
-        Log.d("SearchActivity", "searchForStartTimeClick: timeStartRef_str: " + timeStartRef_str);
+        EditText timeStartEditText = (EditText) findViewById(R.id.timeStartEditText);
+        EditText timeEndEditText = (EditText) findViewById(R.id.timeEndEditText);
+        String timeStart_str = timeStartEditText.getText().toString();
+        String timeEnd_str = timeEndEditText.getText().toString();
+        Log.d("SearchActivity", "searchForStartTimeClick: timeStart_str: " + timeStart_str);
+        Log.d("SearchActivity", "searchForStartTimeClick: timeEnd_str: " + timeEnd_str);
 
         // Parse the time stamp string into the proper 'Date' format
-        Date timeStartRef = parseTimeStamp(timeStartRef_str);
-        Date timeEndRef = parseTimeStamp(timeEndRef_str);
+        Date timeStartRef = parseTimeStamp(timeStart_str);
+        Date timeEndRef = parseTimeStamp(timeEnd_str);
 
         // Handle when timeStartRef and/or timeEndRef inputs are invalid
         // If no valid start time was given, make it as early as possible
@@ -223,10 +228,14 @@ public class SearchActivity extends AppCompatActivity {
         Log.d("SearchActivity", "searchForLocationClick: called");
 
         // Capture the user input and convert into string
-        String topLeftLatRef = findViewById(R.id.topLeftLatEditText).toString();
-        String topLeftLongRef = findViewById(R.id.topLeftLongEditText).toString();
-        String bottomRightLatRef = findViewById(R.id.bottomRightLatEditText).toString();
-        String bottomRightLongRef = findViewById(R.id.bottomRightLongEditText).toString();
+        EditText topLeftLatEditText = (EditText) findViewById(R.id.topLeftLatEditText);
+        EditText topLeftLongEditText = (EditText) findViewById(R.id.topLeftLongEditText);
+        EditText bottomRightLatEditText = (EditText) findViewById(R.id.bottomRightLatEditText);
+        EditText bottomRightLongEditText = (EditText) findViewById(R.id.bottomRightLongEditText);
+        String topLeftLatRef = topLeftLatEditText.getText().toString();
+        String topLeftLongRef = topLeftLongEditText.getText().toString();
+        String bottomRightLatRef = bottomRightLatEditText.getText().toString();
+        String bottomRightLongRef = bottomRightLongEditText.getText().toString();
 
         Log.d("SearchActivity", "searchForLocationClick: topLeftLatRef: " + topLeftLatRef);
         Log.d("SearchActivity", "searchForLocationClick: topLeftLongRef: " + topLeftLongRef);
@@ -239,18 +248,18 @@ public class SearchActivity extends AppCompatActivity {
 
         // Handle when inputs are invalid
         // If no valid location was given, make it top left corner
-        if (topLeftLatRef == null) {
+        if (topLeftLatRef == "") {
             topLeftLatRef = "85";
         }
-        if (topLeftLongRef == null) {
+        if (topLeftLongRef == "") {
             topLeftLongRef = "-180";
         }
 
         // If no valid location was given, make it bottom right corner
-        if (bottomRightLatRef == null) {
+        if (bottomRightLatRef == "") {
             bottomRightLatRef = "-85";
-        }        
-        if (bottomRightLongRef == null) {
+        }
+        if (bottomRightLongRef == "") {
             bottomRightLongRef = "180";
         }
 
@@ -260,7 +269,6 @@ public class SearchActivity extends AppCompatActivity {
         // Create a local copy of the list, so that we can modify the global list
         List<String> fileShortNameList_ = new ArrayList<>();
         fileShortNameList_.addAll(MainActivity.fileShortNameList);
-
         MainActivity.fileShortNameList.clear();
 
         // Iterate through the file name
@@ -275,16 +283,15 @@ public class SearchActivity extends AppCompatActivity {
             myImageData_ = (ImageData) Pickle.load(myImageData_, MainActivity.storageDir + "/" + dataFileName); //load from pickle and cast as ImageData
 
             // Obtain the caption data from the object
-            String locationStampLatFile = myImageData_.locationStampLat;
-            String locationStampLongFile = myImageData_.locationStampLong;
-//            Float locationStampLatFile = parseTimeStamp(locationStampLatFile_str);
-//            Float locationStampLongFile = parseTimeStamp(locationStampLongFile_str);
+            String locationStampLatFile_str = myImageData_.locationStampLat;
+            String locationStampLongFile_str = myImageData_.locationStampLong;
+//            Double locationStampLatFile = parseDouble(locationStampLatFile_str);
+//            Double locationStampLongFile = parseDouble(locationStampLongFile_str);
 
             // Check that the location stamp is within the specified limits
-            // timeStartRef < timeStampFile < timeEndRef
-            if (topLeftLatRef.compareTo(locationStampLatFile) > 0 &&      // (timeEndRef - timeStampFile) > 0
-                    locationStampLatFile.compareTo(topLeftLatRef) > 0){  // (timeStampFile - timeStartRef) > 0
-
+            // bottomRightLatRef < locationStampLatFile < topLeftLatRef
+            if (topLeftLatRef.compareTo(locationStampLatFile_str) > 0 &&      // (topLeftLatRef - locationStampLatFile) > 0
+                    locationStampLatFile_str.compareTo(bottomRightLatRef) > 0){  // (locationStampLatFile - bottomRightLatRef) > 0
                 Log.d("SearchActivity", "Found: " + fileShortName);
                 MainActivity.fileShortNameList.add(fileShortName);
             }

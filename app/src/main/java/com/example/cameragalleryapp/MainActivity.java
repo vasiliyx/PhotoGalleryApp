@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
     // GPS objects //todo fill details in here
     LocationManager locationManager;
     LocationListener locationListener;
+    Location myLocation;
 
 
     @Override
@@ -94,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // TODO figure the permisions out: how to request them in case they've been revoked
+        // TODO figure the permissions out: how to request them in case they've been revoked
         //checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, STORAGE_PERMISSION_CODE);
         //checkPermission(Manifest.permission.CAMERA, CAMERA_PERMISSION_CODE);
 
@@ -107,12 +108,13 @@ public class MainActivity extends AppCompatActivity {
         updateImageCount();
         displayDefaultImage();
 
-        // Location services object and listener
+        // Register location listener with location manager, and THEN call location changed
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
                 Log.i("Location", location.toString());
+                myLocation = location; //set to class variable for use outside of method
             }
 
             @Override
@@ -141,7 +143,6 @@ public class MainActivity extends AppCompatActivity {
         // If location disabled, will alert user to enable location
         // It will redirect to the settings page, where user manually turns it on
         if (!(locationManager.isProviderEnabled((LocationManager.GPS_PROVIDER)))) {
-//            Intent gpsOptionsIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
             builder.setTitle("Location Settings");
             builder.setMessage(Html.fromHtml("<font color='#101010'>Please enable location.</font>")); //changes the text color too
@@ -247,7 +248,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @RequiresApi(api = Build.VERSION_CODES.M)
     // SNAP button runs this method
     public void takePhotoClick(View v)
     {
@@ -295,6 +296,13 @@ public class MainActivity extends AppCompatActivity {
 
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        //todo figure out how to stop the app from crashing if location is null, only happens when gps hasn't updated yet ~ 2 seconds after start up
+//        if ((String.valueOf(myLocation.getLatitude()) == null) || (String.valueOf(myLocation.getLongitude()) == null)) {
+//            myLocation.setLatitude(0.0);
+//            myLocation.setLongitude(0.0);
+//        }
+        String locationStampLat = String.valueOf(myLocation.getLatitude());
+        String locationStampLong = String.valueOf(myLocation.getLongitude());
         String imageCount_str = intToString(imageCount+1); // the count for the next image
         String imageFileName = "IMG_" + imageCount_str; // add time stamp to file name
         Log.d("MainActivity", "createImageFile: imageCount_str: "+ imageCount_str);
@@ -312,9 +320,11 @@ public class MainActivity extends AppCompatActivity {
 
         // Create a data file on the file system associated with the image
         ImageData myImageData = new ImageData();
-        myImageData.caption = "";
         myImageData.timeStamp = timeStamp;
-        Pickle.save(myImageData ,myCurrentCaptionPath); // Save the file
+        myImageData.locationStampLat = locationStampLat;
+        myImageData.locationStampLong = locationStampLong;
+        myImageData.caption = "";
+        Pickle.save(myImageData, myCurrentCaptionPath); // Save the file
 
         // Image count will be determined after the files are created in the file system
         return image;
@@ -571,7 +581,6 @@ public class MainActivity extends AppCompatActivity {
             // Add the fileName to the list
             fileNameList.add(fileName);
 
-
             // Assumption: the name of the .dat and .jpg files are the same to have it working
 
             // Check if the file name is the same as the image file name, and add to the list
@@ -585,12 +594,11 @@ public class MainActivity extends AppCompatActivity {
 
             // Check if the file name is the same as the data file name, and add to the list
             boolean isData = fileName.matches("(.*)IMG_[0-9]{5}.dat(.*)");
-
             Log.i("FILE NAME", file.getName() + ", isImage: " + isImage + ", isData: " + isData);
         }
 
 
-    }
+    }//end updateListDirectory
 
 
     // Upon startup, determine the image count.

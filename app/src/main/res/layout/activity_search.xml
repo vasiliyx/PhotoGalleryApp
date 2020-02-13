@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="10dp"
         android:text="@string/caption_based_search"
         android:fontFamily="sans-serif-medium"
         android:textAllCaps="true"
@@ -35,7 +35,7 @@
         android:textColorHint="#eee"
         android:autofillHints=""
         android:background="@drawable/et_rounded_style"
-        android:drawableLeft="@drawable/ic_search_black_24dp"
+        android:drawableLeft="@drawable/ic_font_download_white_24dp"
         android:drawablePadding="10dp"
         android:onClick="searchForCaptionClick" />
 
@@ -59,7 +59,7 @@
         android:layout_below="@id/timeTextView"
         android:layout_centerHorizontal="true"
         android:padding="10dp"
-        android:inputType=""
+        android:inputType="datetime"
         android:textSize="18sp"
         android:textStyle="italic"
         android:textColor="#eee"
@@ -67,7 +67,7 @@
         android:autofillHints=""
         android:textColorHint="#eee"
         android:background="@drawable/et_rounded_style"
-        android:drawableLeft="@drawable/ic_search_black_24dp"
+        android:drawableLeft="@drawable/ic_date_range_white_24dp"
         android:drawablePadding="10dp"/>
 
     <EditText
@@ -86,9 +86,8 @@
         android:textColorHint="#eee"
         android:autofillHints=""
         android:background="@drawable/et_rounded_style"
-        android:drawableLeft="@drawable/ic_search_black_24dp"
-        android:drawablePadding="10dp"
-         />
+        android:drawableLeft="@drawable/ic_date_range_white_24dp"
+        android:drawablePadding="10dp" />
 
 
     <Button
@@ -100,8 +99,8 @@
         android:layout_alignStart="@id/timeEndEditText"
         android:layout_alignRight="@id/timeEndEditText"
         android:layout_alignEnd="@id/timeEndEditText"
-        android:background="@drawable/et_rounded_button"
         android:layout_marginTop="5dp"
+        android:background="@drawable/et_rounded_button"
         android:text="Go"
         android:textSize="24sp"
         android:textColor="#FFF"
@@ -122,55 +121,121 @@
         android:textColor="#fff"
         android:textSize="24sp"/>
 
-    <EditText
-        android:id="@+id/topLeftEditText"
-        android:layout_width="380dp"
+    <TextView
+        android:id="@+id/topLeftTextView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_below="@id/locationTextView"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
+        android:fontFamily="sans-serif"
+        android:text="Top Left Coordinates"
+        android:textColor="#fff"
+        android:textSize="15sp"/>
+
+    <EditText
+        android:id="@+id/topLeftLatEditText"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/topLeftTextView"
+        android:layout_marginTop="5dp"
+        android:layout_alignStart="@id/searchTimeButton"
+        android:layout_alignLeft="@id/searchTimeButton"
         android:padding="10dp"
-        android:inputType="textCapSentences"
+        android:inputType="numberSigned|numberDecimal"
         android:textSize="18sp"
         android:textStyle="italic"
         android:textColor="#eee"
-        android:hint="Enter Top Left Corner"
+        android:hint="Enter Latitude"
         android:textColorHint="#eee"
         android:autofillHints=""
         android:background="@drawable/et_rounded_style"
-        android:drawableLeft="@drawable/ic_search_black_24dp"
+        android:drawableLeft="@drawable/ic_location_on_white_24dp"
         android:drawablePadding="10dp" />
 
     <EditText
-        android:id="@+id/bottomRightEditText"
-        android:layout_width="380dp"
+        android:id="@+id/topLeftLongEditText"
+        android:layout_width="180dp"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/topLeftEditText"
+        android:layout_below="@id/topLeftTextView"
         android:layout_marginTop="5dp"
-        android:inputType="textCapSentences"
+        android:layout_alignEnd="@id/searchTimeButton"
+        android:layout_alignRight="@id/searchTimeButton"
+        android:padding="10dp"
+        android:inputType="numberSigned|numberDecimal"
         android:textSize="18sp"
         android:textStyle="italic"
         android:textColor="#eee"
-        android:hint="Enter Bottom Right Corner"
+        android:hint="Enter Longitude"
         android:textColorHint="#eee"
+        android:autofillHints=""
         android:background="@drawable/et_rounded_style"
-        android:drawableLeft="@drawable/ic_search_black_24dp"
-        android:drawablePadding="10dp"
-        android:autofillHints="" />
+        android:drawableLeft="@drawable/ic_location_on_white_24dp"
+        android:drawablePadding="10dp" />
+
+    <TextView
+        android:id="@+id/bottomTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/topLeftLatEditText"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:fontFamily="sans-serif"
+        android:text="Bottom Right Coordinates"
+        android:textColor="#fff"
+        android:textSize="15sp"/>
+
+    <EditText
+        android:id="@+id/bottomRightLatEditText"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/bottomTextView"
+        android:layout_marginTop="5dp"
+        android:layout_alignStart="@id/searchTimeButton"
+        android:layout_alignLeft="@id/searchTimeButton"
+        android:padding="10dp"
+        android:inputType="numberSigned|numberDecimal"
+        android:textSize="18sp"
+        android:textStyle="italic"
+        android:textColor="#eee"
+        android:hint="Enter Latitude"
+        android:textColorHint="#eee"
+        android:autofillHints=""
+        android:background="@drawable/et_rounded_style"
+        android:drawableLeft="@drawable/ic_location_on_white_24dp"
+        android:drawablePadding="10dp" />
+
+    <EditText
+        android:id="@+id/bottomRightLongEditText"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/bottomTextView"
+        android:layout_marginTop="5dp"
+        android:layout_alignEnd="@id/searchTimeButton"
+        android:layout_alignRight="@id/searchTimeButton"
+        android:padding="10dp"
+        android:inputType="numberSigned|numberDecimal"
+        android:textSize="18sp"
+        android:textStyle="italic"
+        android:textColor="#eee"
+        android:hint="Enter Latitude"
+        android:textColorHint="#eee"
+        android:autofillHints=""
+        android:background="@drawable/et_rounded_style"
+        android:drawableLeft="@drawable/ic_location_on_white_24dp"
+        android:drawablePadding="10dp" />
 
     <Button
         android:id="@+id/searchLocationButton"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:layout_below="@id/bottomRightEditText"
-        android:layout_alignLeft="@id/bottomRightEditText"
-        android:layout_alignStart="@id/bottomRightEditText"
-        android:layout_alignRight="@id/bottomRightEditText"
-        android:layout_alignEnd="@id/bottomRightEditText"
-        android:background="@drawable/et_rounded_button"
+        android:layout_below="@id/bottomRightLongEditText"
+        android:layout_alignLeft="@id/bottomRightLatEditText"
+        android:layout_alignStart="@id/bottomRightLatEditText"
+        android:layout_alignRight="@id/bottomRightLongEditText"
+        android:layout_alignEnd="@id/bottomRightLongEditText"
         android:layout_marginTop="5dp"
+        android:background="@drawable/et_rounded_button"
         android:text="Go"
         android:textSize="24sp"
         android:textColor="#FFF"

@@ -281,7 +281,7 @@ public class SearchActivity extends AppCompatActivity {
             ImageData myImageData_ = null; // create an empty instance to hold the data
             myImageData_ = (ImageData) Pickle.load(myImageData_, MainActivity.storageDir + "/" + dataFileName); //load from pickle and cast as ImageData
 
-            // Obtain the caption data from the object
+            // Obtain the location data from the object and convert it to numbers
             String locationStampLatFile_str = myImageData_.locationStampLat;
             String locationStampLongFile_str = myImageData_.locationStampLong;
             Double locationStampLatFile = parseDouble(locationStampLatFile_str);

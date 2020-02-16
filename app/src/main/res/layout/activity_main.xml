@@ -7,6 +7,19 @@
     android:background="#000"
     tools:context=".MainActivity">
 
+    <TextView
+        android:id="@+id/locationDebugTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="60dp"
+        android:layout_marginLeft="60dp"
+        android:layout_above="@id/uploadPhotoButton"
+        android:layout_toEndOf="@id/takePhotoButton"
+        android:layout_toRightOf="@id/takePhotoButton"
+        android:textColor="#FFF"
+        android:textSize="20sp"
+        android:visibility="visible"/>
+
     <ImageView
         android:id="@+id/galleryImageView"
         android:layout_width="wrap_content"

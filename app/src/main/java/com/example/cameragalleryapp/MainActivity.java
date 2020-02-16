@@ -94,6 +94,10 @@ public class MainActivity extends AppCompatActivity {
         Log.d("MainActivity", "onCreate: called");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+//
+//        // Display the location on the main page (debugging)
+//        TextView locationDebugTextView = findViewById(R.id.locationDebugTextView);
+//        locationDebugTextView.setText("HELLO");
 
         // TODO figure the permissions out: how to request them in case they've been revoked
         //checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, STORAGE_PERMISSION_CODE);
@@ -115,6 +119,17 @@ public class MainActivity extends AppCompatActivity {
             public void onLocationChanged(Location location) {
                 Log.i("Location", location.toString());
                 myLocation = location; //set to class variable for use outside of method
+
+
+                // Display the location on the main page (debugging)
+                TextView locationDebugTextView = findViewById(R.id.locationDebugTextView);
+                String lat_str = String.valueOf(myLocation.getLatitude());
+                String long_str = String.valueOf(myLocation.getLongitude());
+                locationDebugTextView.setText(lat_str + "," + long_str);
+//                locationDebugTextView.setText("HELLO");
+
+                // TODO
+                // if location null and time < 3s then wait
             }
 
             @Override
@@ -163,6 +178,8 @@ public class MainActivity extends AppCompatActivity {
                     });
             builder.create().show();
         }
+
+
     }//onCreate end
 
 
@@ -297,12 +314,20 @@ public class MainActivity extends AppCompatActivity {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         //todo figure out how to stop the app from crashing if location is null, only happens when gps hasn't updated yet ~ 2 seconds after start up
-//        if ((String.valueOf(myLocation.getLatitude()) == null) || (String.valueOf(myLocation.getLongitude()) == null)) {
-//            myLocation.setLatitude(0.0);
-//            myLocation.setLongitude(0.0);
-//        }
-        String locationStampLat = String.valueOf(myLocation.getLatitude());
-        String locationStampLong = String.valueOf(myLocation.getLongitude());
+
+        String locationStampLat, locationStampLong;
+
+        try{
+            locationStampLat = String.valueOf(myLocation.getLatitude());
+            locationStampLong = String.valueOf(myLocation.getLongitude());
+        }
+        catch (Exception e){
+            locationStampLat = "";
+            locationStampLong = "";
+            Log.d("MainActivity", "createImageFile: location null");
+        }
+
+
         String imageCount_str = intToString(imageCount+1); // the count for the next image
         String imageFileName = "IMG_" + imageCount_str; // add time stamp to file name
         Log.d("MainActivity", "createImageFile: imageCount_str: "+ imageCount_str);
@@ -336,46 +361,61 @@ public class MainActivity extends AppCompatActivity {
     public void uploadPhotoClick (View v) {
         Log.d("MainActivity", "uploadPhotoClick: called");
 
-        // Check if app is installed
-        String packageName = "com.facebook.katana"; //facebook app package name (not messenger)
-        final boolean packageInstalled = isPackageInstalled(packageName, this);
-        Log.i("MainActivity", "uploadPhotoClick: Package installed = " + packageInstalled);
+        // Get the total number of images form the list. This is different from imageCount.
+        int numberOfImages = fileShortNameList.size();
 
-        // todo consider making the file path global
-        // File path to invoke intent
-        String imageFileName = fileShortNameList.get(currentlyDisplayedImageIndex) + ".jpg";
-        String mPath = myStoragePath + "/" + imageFileName;
+        // When there are images in the list
+        if (numberOfImages > 0){
+            // Check if app is installed
+            String packageName = "com.facebook.katana"; //facebook app package name (not messenger)
+            final boolean packageInstalled = isPackageInstalled(packageName, this);
+            Log.i("MainActivity", "uploadPhotoClick: Package installed = " + packageInstalled);
 
-        // todo consider making 'caption' a global variable
+            // todo consider making the file path global
+            // File path to invoke intent
+            String imageFileName = fileShortNameList.get(currentlyDisplayedImageIndex) + ".jpg";
+            String mPath = myStoragePath + "/" + imageFileName;
+
+            // todo consider making 'caption' a global variable
 //        EditText captionEditText = (EditText) findViewById(R.id.captionEditText);
 //        TextView captionTextView = (TextView) findViewById(R.id.captionTextView);
 //        String caption = captionEditText.getText().toString(); // Capture the caption string
 
-        // Create an intent type that is used to send to social media platforms or any other app
-        Intent share = new Intent(Intent.ACTION_SEND);
-        share.setType("image/jpeg"); //default image type
-        share.putExtra(Intent.EXTRA_STREAM,Uri.parse(mPath)); //parse the string to include only file path
-        share.putExtra(Intent.EXTRA_TEXT, "I sent you an image, here is the text."); //on Whatsapp, this is seen under the image
-        share.putExtra(Intent.EXTRA_TITLE,"Sent you a title" );
-        share.putExtra(Intent.EXTRA_SUBJECT,"Sent you a subject" );
+            // Create an intent type that is used to send to social media platforms or any other app
+            Intent share = new Intent(Intent.ACTION_SEND);
+            share.setType("image/jpeg"); //default image type
+            share.putExtra(Intent.EXTRA_STREAM,Uri.parse(mPath)); //parse the string to include only file path
+            share.putExtra(Intent.EXTRA_TEXT, "I sent you an image, here is the text."); //on Whatsapp, this is seen under the image
+            share.putExtra(Intent.EXTRA_TITLE,"Sent you a title" );
+            share.putExtra(Intent.EXTRA_SUBJECT,"Sent you a subject" );
 //        share.setPackage(packageName); //comment this out if you want to share via any app
 
-        // todo ask tej how he wants the upload button to be disabled
-        // Change what the upload button reads and notify the user the upload processing has begun
-        final Button uploadPhotoButton = findViewById(R.id.uploadPhotoButton);
-        uploadPhotoButton.setEnabled(false);
-        Toast.makeText(this, "Uploading...", Toast.LENGTH_SHORT).show();
-        uploadPhotoButton.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                uploadPhotoButton.setEnabled(true);
-            }
-        }, 5000);
+            // todo ask tej how he wants the upload button to be disabled
+            // Change what the upload button reads and notify the user the upload processing has begun
+            final Button uploadPhotoButton = findViewById(R.id.uploadPhotoButton);
+            uploadPhotoButton.setEnabled(false);
+            Toast.makeText(this, "Uploading...", Toast.LENGTH_SHORT).show();
+            uploadPhotoButton.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    uploadPhotoButton.setEnabled(true);
+                }
+            }, 5000);
 
-        startActivityForResult(Intent.createChooser(share, "Share The Image Via"),SHARE_PIC_REQUEST);
+            startActivityForResult(Intent.createChooser(share, "Share The Image Via"),SHARE_PIC_REQUEST);
 
 //        uploadPhotoButton.setEnabled(true);
 //        Toast.makeText(this, "Uploaded", Toast.LENGTH_SHORT).show();
+
+        }
+
+        // When there no images in the list, display default
+        else if (numberOfImages == 0){
+
+        }
+
+
+
     }
 
 

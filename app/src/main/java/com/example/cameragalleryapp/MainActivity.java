@@ -37,6 +37,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Timer;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -44,6 +45,9 @@ public class MainActivity extends AppCompatActivity {
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int SEARCH_ACTIVITY = 2; // Intent Code
     static final int SHARE_PIC_REQUEST = 3; // Sharing to social media
+
+    static int imageCount = 0; // Used to increment the name of the file
+    static int currentlyDisplayedImageIndex = 0; // Used for displaying the image from the list
 
     static String myCurrentPhotoPath; // this will be updated every time a new image is taken
     static String myCurrentCaptionPath; // this will be updated every time a new image is taken
@@ -53,15 +57,6 @@ public class MainActivity extends AppCompatActivity {
     static List <String> fileShortNameList = new ArrayList<String>(); // List of all names of the image without the extension
 
     static File storageDir; // Working directory path
-
-    static int imageCount = 0; // Used to increment the name of the file
-    static int currentlyDisplayedImageIndex = 0; // Used for displaying the image from the list
-
-    // Defining Permission codes.
-    // We can give any value
-    // but unique for each permission.
-    private static final int CAMERA_PERMISSION_CODE = 100;
-    private static final int STORAGE_PERMISSION_CODE = 101;
 
     // GPS objects //todo fill details in here
     LocationManager locationManager;
@@ -88,6 +83,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Notify user the location is still loading
+        TextView latDebugTextView = findViewById(R.id.latDebugTextView);
+        TextView longDebugTextView = findViewById(R.id.longDebugTextView);
+        latDebugTextView.setText("LAT: loading...");
+        latDebugTextView.setSingleLine(); //doesn't allow number to roll over to next line
+        longDebugTextView.setText("LONG: loading...");
+        longDebugTextView.setSingleLine();
+
         // Get storage path
         storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         myStoragePath = storageDir.getAbsolutePath();
@@ -105,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.i("Location", location.toString());
                 myLocation = location; //set to class variable for use outside of method
 
-                // Display the location on the main page (debugging)
+                // Displays the location on the main activity
                 TextView latDebugTextView = findViewById(R.id.latDebugTextView);
                 TextView longDebugTextView = findViewById(R.id.longDebugTextView);
                 String lat_str = String.valueOf(myLocation.getLatitude());
@@ -115,9 +118,7 @@ public class MainActivity extends AppCompatActivity {
                 longDebugTextView.setText("LONG: " + long_str);
                 longDebugTextView.setSingleLine();
 
-
                 // TODO
-                // if location null and time < 3s then wait
             }
 
             @Override
@@ -284,14 +285,15 @@ public class MainActivity extends AppCompatActivity {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String locationStampLat, locationStampLong;
 
-        //todo figure out how to stop the app from crashing if location is null, only happens when gps hasn't updated yet ~ 2 seconds after start up
+        // When location is initially null, no location is assigned (search function will not find picture)
         try{
             locationStampLat = String.valueOf(myLocation.getLatitude());
             locationStampLong = String.valueOf(myLocation.getLongitude());
         }
         catch (Exception e){
-            locationStampLat = "0";
-            locationStampLong = "0";
+            locationStampLat = "";
+            locationStampLong = "";
+
             Log.d("MainActivity", "createImageFile: location null");
         }
 

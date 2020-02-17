@@ -16,7 +16,6 @@ import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -32,18 +31,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import javax.security.auth.login.LoginException;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -94,14 +87,6 @@ public class MainActivity extends AppCompatActivity {
         Log.d("MainActivity", "onCreate: called");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//
-//        // Display the location on the main page (debugging)
-//        TextView locationDebugTextView = findViewById(R.id.locationDebugTextView);
-//        locationDebugTextView.setText("HELLO");
-
-        // TODO figure the permissions out: how to request them in case they've been revoked
-        //checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, STORAGE_PERMISSION_CODE);
-        //checkPermission(Manifest.permission.CAMERA, CAMERA_PERMISSION_CODE);
 
         // Get storage path
         storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
@@ -120,13 +105,16 @@ public class MainActivity extends AppCompatActivity {
                 Log.i("Location", location.toString());
                 myLocation = location; //set to class variable for use outside of method
 
-
                 // Display the location on the main page (debugging)
-                TextView locationDebugTextView = findViewById(R.id.locationDebugTextView);
+                TextView latDebugTextView = findViewById(R.id.latDebugTextView);
+                TextView longDebugTextView = findViewById(R.id.longDebugTextView);
                 String lat_str = String.valueOf(myLocation.getLatitude());
                 String long_str = String.valueOf(myLocation.getLongitude());
-                locationDebugTextView.setText(lat_str + "," + long_str);
-//                locationDebugTextView.setText("HELLO");
+                latDebugTextView.setText("LAT: "+ lat_str);
+                latDebugTextView.setSingleLine(); //doesn't allow number to roll over to next line
+                longDebugTextView.setText("LONG: " + long_str);
+                longDebugTextView.setSingleLine();
+
 
                 // TODO
                 // if location null and time < 3s then wait
@@ -187,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
     // This method is used at the start up and/or when there are no images in the list
     private void displayDefaultImage(){
         ImageView galleryImageView = (ImageView) findViewById(R.id.galleryImageView);
-        galleryImageView.setImageResource(R.drawable.ic_launcher_background); //todo change this to something nicer
+        galleryImageView.setImageResource(R.drawable.sym_left_right_white_24dp); //this is the default image when no pic loaded
 
     }
 
@@ -245,28 +233,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    // Function to check and request permission.
-    // TODO figure the permisions out: how to request them in case they've been revoked
-    public void checkPermission(String permission, int requestCode)
-    {
-        if (ContextCompat.checkSelfPermission(MainActivity.this, permission)
-                == PackageManager.PERMISSION_DENIED)
-        {
-            // TODO for some reason it shows that permision is denied... Figure it out!
-            Log.d("MainActivity", "checkPermission: Permission Denied: requesting: "+permission);
-            // Requesting the permission
-            ActivityCompat.requestPermissions(MainActivity.this,
-                    new String[] { permission },
-                    requestCode);
-        }
-        else {
-            Log.d("MainActivity", "checkPermission: Permission already granted: "+permission);
-        }
-    }
-
-
     @RequiresApi(api = Build.VERSION_CODES.M)
     // SNAP button runs this method
+    // Uses the intent from image capture to create a file and invoke another activity to show the image
     public void takePhotoClick(View v)
     {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -311,22 +280,20 @@ public class MainActivity extends AppCompatActivity {
     public File createImageFile() throws IOException {
         Log.d("MainActivity", "createImageFile: called");
 
-        // Create an image file name
+        // Declare image information strings
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        //todo figure out how to stop the app from crashing if location is null, only happens when gps hasn't updated yet ~ 2 seconds after start up
-
         String locationStampLat, locationStampLong;
 
+        //todo figure out how to stop the app from crashing if location is null, only happens when gps hasn't updated yet ~ 2 seconds after start up
         try{
             locationStampLat = String.valueOf(myLocation.getLatitude());
             locationStampLong = String.valueOf(myLocation.getLongitude());
         }
         catch (Exception e){
-            locationStampLat = "";
-            locationStampLong = "";
+            locationStampLat = "0";
+            locationStampLong = "0";
             Log.d("MainActivity", "createImageFile: location null");
         }
-
 
         String imageCount_str = intToString(imageCount+1); // the count for the next image
         String imageFileName = "IMG_" + imageCount_str; // add time stamp to file name

@@ -118,8 +118,6 @@ public class MainActivity extends AppCompatActivity {
                 latDebugTextView.setSingleLine(); //doesn't allow number to roll over to next line
                 longDebugTextView.setText("LONG: " + long_str);
                 longDebugTextView.setSingleLine();
-
-                // TODO
             }
 
             @Override
@@ -284,7 +282,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d("MainActivity", "createImageFile: called");
 
         // Declare image information strings
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()); //set current time and date
         String locationStampLat, locationStampLong;
 
         // When location is initially null, no location is assigned (search function will not find picture)
@@ -331,6 +329,7 @@ public class MainActivity extends AppCompatActivity {
     // Share image via intent to wake up social media app installed on device
     public void uploadPhotoClick (View v) {
         Log.d("MainActivity", "uploadPhotoClick: called");
+        final Button uploadPhotoButton = findViewById(R.id.uploadPhotoButton); //to enable/disable button
 
         // Get the total number of images form the list. This is different from imageCount.
         int numberOfImages = fileShortNameList.size();
@@ -356,7 +355,6 @@ public class MainActivity extends AppCompatActivity {
 //        share.setPackage(packageName); //comment this out if you want to share via any app
 
             // Change what the upload button reads and notify the user the upload processing has begun
-            final Button uploadPhotoButton = findViewById(R.id.uploadPhotoButton);
             uploadPhotoButton.setEnabled(false);
             Toast.makeText(this, "Uploading...", Toast.LENGTH_SHORT).show();
             uploadPhotoButton.postDelayed(new Runnable() {
@@ -367,15 +365,11 @@ public class MainActivity extends AppCompatActivity {
             }, 1000);
 
             startActivityForResult(Intent.createChooser(share, "Share The Image Via"),SHARE_PIC_REQUEST);
-
-//        uploadPhotoButton.setEnabled(true);
-//        Toast.makeText(this, "Uploaded", Toast.LENGTH_SHORT).show();
-
         }
 
         // When there no images in the list, display default
         else if (numberOfImages == 0){
-
+            uploadPhotoButton.setEnabled(false);
         }
 
 

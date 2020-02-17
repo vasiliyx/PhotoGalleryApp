@@ -1,8 +1,9 @@
+//todo - this is not implemented, use PickleUnitTest for unit testing
 package com.example.cameragalleryapp.supportpackage;
 
 import org.junit.Test;
 
-public class SortImagesTest {
+public class SortImagesUnitTest {
 
     @Test
     public void setUp() throws Exception {

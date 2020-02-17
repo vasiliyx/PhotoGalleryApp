@@ -1,7 +1,8 @@
+//todo - this is not implemented, use Pickle
 package com.example.cameragalleryapp.supportpackage;
 import android.util.Log;
 
-//todo make this work
+
 //ADCB
 import com.example.cameragalleryapp.MainActivity; //import the other class
 

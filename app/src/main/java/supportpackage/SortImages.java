@@ -26,7 +26,7 @@ public class SortImages {
 //        MainActivity.updateListDirectory();
 
         // Create a local copy of the list, so that we can modify the global list
-        final List<String> fileShortNameList_ = new ArrayList<>(); //declare local copy
+        List<String> fileShortNameList_ = new ArrayList<>(); //declare local copy
         fileShortNameList_.addAll(MainActivity.fileShortNameList); //move global copy to local copy
         MainActivity.fileShortNameList.clear(); //clear global copy
 

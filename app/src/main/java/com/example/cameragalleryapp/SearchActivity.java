@@ -43,24 +43,6 @@ public class SearchActivity extends AppCompatActivity {
     }
 
 
-    // ?? What is this for?
-    // TODO remove this if not needed
-    public void cancel(final View view) {
-        finish();
-    }
-
-
-    // ?? What is this for?
-    // TODO remove this if not needed
-    public void search(final View view) {
-        Intent intent = new Intent();
-        //intent.putExtra("STARTDATE", fromDate.getText().toString());
-        //intent.putExtra("ENDDATE", toDate.getText().toString());
-        setResult(RESULT_OK, intent);
-        finish();
-    }
-
-
     // When the enter button is pressed, look for the key word in all the images.
     public void searchForCaptionClick(View v) {
         Log.d("SearchActivity", "searchForCaptionClick: called");
@@ -84,10 +66,10 @@ public class SearchActivity extends AppCompatActivity {
 
         // Create a local copy of the list, so that we can modify the global list
         List<String> fileShortNameList_ = new ArrayList<>();
-        fileShortNameList_.addAll(MainActivity.fileShortNameList);
-        MainActivity.fileShortNameList.clear();
+        fileShortNameList_.addAll(MainActivity.fileShortNameList); //clone the list
+        MainActivity.fileShortNameList.clear(); //clear the original
 
-        // Iterate through the file name
+        // Iterate through the file name (cloned list)
         for (int i = 0; i < fileShortNameList_.size(); i++) {
 
             // Update the loop variables
@@ -106,10 +88,10 @@ public class SearchActivity extends AppCompatActivity {
             // Compare the caption ref with caption file
             boolean isFound = captionFile.contains(captionRef);
 
-            // If found add back to the general list list
+            // If found add back to the general list
             if (isFound) {
                 Log.d("SearchActivity", "Found: " + fileShortName);
-                MainActivity.fileShortNameList.add(fileShortName);
+                MainActivity.fileShortNameList.add(fileShortName); //add back to the original list that satisfy requirements
             }
         }
         Log.d("SearchActivity", "searchForCaption: finished search");
@@ -158,8 +140,7 @@ public class SearchActivity extends AppCompatActivity {
         // Create a local copy of the list, so that we can modify the global list
         List<String> fileShortNameList_ = new ArrayList<>();
         fileShortNameList_.addAll(MainActivity.fileShortNameList);
-
-        MainActivity.fileShortNameList.clear();
+        MainActivity.fileShortNameList.clear(); //global list needs to be created first before modfiying
 
         // Iterate through the file name
         for (int i = 0; i < fileShortNameList_.size(); i++) {
@@ -240,27 +221,6 @@ public class SearchActivity extends AppCompatActivity {
         Log.d("SearchActivity", "searchForLocationClick: topLeftLongRef: " + topLeftLongRef);
         Log.d("SearchActivity", "searchForLocationClick: bottomRightLatRef: " + bottomRightLatRef);
         Log.d("SearchActivity", "searchForLocationClick: bottomRightLongRef: " + bottomRightLongRef);
-
-//        // Parse the time stamp string into the proper 'Date' format
-//        Date timeStartRef = parseTimeStamp(timeStartRef_str);
-//        Date timeEndRef = parseTimeStamp(timeEndRef_str);
-
-//        // Handle when inputs are invalid
-//        // If no valid location was given, make it top left corner
-//        if (topLeftLatRef == "") {
-//            topLeftLatRef = "85";
-//        }
-//        if (topLeftLongRef == "") {
-//            topLeftLongRef = "-180";
-//        }
-//
-//        // If no valid location was given, make it bottom right corner
-//        if (bottomRightLatRef == "") {
-//            bottomRightLatRef = "-85";
-//        }
-//        if (bottomRightLongRef == "") {
-//            bottomRightLongRef = "180";
-//        }
 
         // Update/Reset the list Directory
         MainActivity.updateListDirectory();

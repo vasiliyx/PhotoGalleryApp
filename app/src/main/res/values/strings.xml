@@ -11,6 +11,6 @@
     <string name="end_time_yyyymmdd_hhmmss">End Time: YYYYMMDD HHMMSS</string>
     <string name="location_based_search">Location Based Search</string>
     <string name="top_left_coordinates">Top Left Coordinates</string>
-    <string name="enter_longitude">Enter Longitude</string>
+    <string name="enter_long">Enter Long</string>
     <string name="bottom_right_coordinates">Bottom Right Coordinates</string>
 </resources>

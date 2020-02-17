@@ -1,4 +1,3 @@
-//todo the GPS prints successful in info
 package com.example.cameragalleryapp;
 
 import androidx.annotation.NonNull;
@@ -53,8 +52,9 @@ public class MainActivity extends AppCompatActivity {
     static String myCurrentCaptionPath; // this will be updated every time a new image is taken
     static String myStoragePath; // this will remain the same through the program
 
-    static List <String> fileNameList  = new ArrayList<String>(); // List of all the files in the directory (including the image and caption files)
-    static List <String> fileShortNameList = new ArrayList<String>(); // List of all names of the image without the extension
+    //todo change fileshortnamelist to private and create a workaround
+    public static List<String> fileNameList  = new ArrayList<>(); // List of all the files in the directory (including the image and caption files)
+    public static List<String> fileShortNameList = new ArrayList<>(); // List of all names of the image without the extension
 
     static File storageDir; // Working directory path
 

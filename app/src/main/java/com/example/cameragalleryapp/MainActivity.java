@@ -30,13 +30,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.cameragalleryapp.supportpackage.Pickle;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Timer;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -190,6 +191,7 @@ public class MainActivity extends AppCompatActivity {
 
         // When there are images in the list
         if (numberOfImages > 0){
+
             // Get the image file name for the new displaying index
             String imageFileName = fileShortNameList.get(currentlyDisplayedImageIndex) + ".jpg";
 

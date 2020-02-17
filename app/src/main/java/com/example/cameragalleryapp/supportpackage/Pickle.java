@@ -1,4 +1,4 @@
-package com.example.cameragalleryapp;
+package com.example.cameragalleryapp.supportpackage;
 
 
 import android.util.Log;
@@ -9,8 +9,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-// My Java adapted pickle class
-//
+//Supporting Java Class
+// Adapted pickle class
+// Object Serialization
 //
 // Example:
 //      // Create the object

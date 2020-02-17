@@ -338,15 +338,9 @@ public class MainActivity extends AppCompatActivity {
             final boolean packageInstalled = isPackageInstalled(packageName, this);
             Log.i("MainActivity", "uploadPhotoClick: Package installed = " + packageInstalled);
 
-            // todo consider making the file path global
             // File path to invoke intent
             String imageFileName = fileShortNameList.get(currentlyDisplayedImageIndex) + ".jpg";
             String mPath = myStoragePath + "/" + imageFileName;
-
-            // todo consider making 'caption' a global variable
-//        EditText captionEditText = (EditText) findViewById(R.id.captionEditText);
-//        TextView captionTextView = (TextView) findViewById(R.id.captionTextView);
-//        String caption = captionEditText.getText().toString(); // Capture the caption string
 
             // Create an intent type that is used to send to social media platforms or any other app
             Intent share = new Intent(Intent.ACTION_SEND);
@@ -357,7 +351,6 @@ public class MainActivity extends AppCompatActivity {
             share.putExtra(Intent.EXTRA_SUBJECT,"Sent you a subject" );
 //        share.setPackage(packageName); //comment this out if you want to share via any app
 
-            // todo ask tej how he wants the upload button to be disabled
             // Change what the upload button reads and notify the user the upload processing has begun
             final Button uploadPhotoButton = findViewById(R.id.uploadPhotoButton);
             uploadPhotoButton.setEnabled(false);
@@ -367,7 +360,7 @@ public class MainActivity extends AppCompatActivity {
                 public void run() {
                     uploadPhotoButton.setEnabled(true);
                 }
-            }, 5000);
+            }, 1000);
 
             startActivityForResult(Intent.createChooser(share, "Share The Image Via"),SHARE_PIC_REQUEST);
 

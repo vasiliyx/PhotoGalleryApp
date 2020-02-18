@@ -1,3 +1,4 @@
+//todo comment everything better
 package com.example.cameragalleryapp.supportpackage;
 
 import com.example.cameragalleryapp.ImageData;

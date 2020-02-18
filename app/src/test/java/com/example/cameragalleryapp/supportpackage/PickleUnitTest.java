@@ -35,7 +35,7 @@ public class PickleUnitTest {
         testImageDataIn.locationStampLong = locationStampLong;
         testImageDataIn.caption = testCaption;
         Pickle.save(testImageDataIn, testPath); // Save the file
-        Pickle.load(testImageDataOut, testPath); // Load the file
+        testImageDataOut = (ImageData) Pickle.load(testImageDataOut, testPath); // Load the file
         assertEquals(testImageDataIn,testImageDataOut);
     }
 

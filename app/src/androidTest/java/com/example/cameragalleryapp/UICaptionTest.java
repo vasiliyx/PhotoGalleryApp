@@ -26,8 +26,8 @@ public class UICaptionTest {
     @Test
     public void ensureCaptionSearchWorks() {
         onView(withId(R.id.filterPhotoButton)).perform(click()); // first press the filter button
-        onView(withId(R.id.keywordsEditText)).perform(typeText("router")); //type in the caption to be found and close keyboard
-        onView(withId(R.id.keywordsEditText)).perform(click()); // press enter
-        onView(withId(R.id.captionTextView)).check(matches(withText("router"))); // perform the comparison
+        onView(withId(R.id.keywordsEditText)).perform(typeText("A"),closeSoftKeyboard()); //type in the caption to be found and close keyboard
+        onView(withId(R.id.searchCaptionButton)).perform(click()); // press enter
+        onView(withId(R.id.captionTextView)).check(matches(withText("A"))); // perform the comparison
     }
 }

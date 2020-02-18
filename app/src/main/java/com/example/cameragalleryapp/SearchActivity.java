@@ -206,15 +206,43 @@ public class SearchActivity extends AppCompatActivity {
     public void searchForLocationClick(View v) throws ParseException {
         Log.d("SearchActivity", "searchForLocationClick: called");
 
-        // Capture the coordinate inputs and convert into doubles
+        // Capture the user input coordinates
         EditText topLeftLatEditText = (EditText) findViewById(R.id.topLeftLatEditText);
         EditText topLeftLongEditText = (EditText) findViewById(R.id.topLeftLongEditText);
         EditText bottomRightLatEditText = (EditText) findViewById(R.id.bottomRightLatEditText);
         EditText bottomRightLongEditText = (EditText) findViewById(R.id.bottomRightLongEditText);
-        Double topLeftLatRef = parseDouble(topLeftLatEditText.getText().toString());
-        Double topLeftLongRef = parseDouble(topLeftLongEditText.getText().toString());
-        Double bottomRightLatRef = parseDouble(bottomRightLatEditText.getText().toString());
-        Double bottomRightLongRef = parseDouble(bottomRightLongEditText.getText().toString());
+        Double topLeftLatRef, topLeftLongRef, bottomRightLatRef, bottomRightLongRef;
+
+        // Handles for no input, and convert to double for displaying and processing
+        // Top left corner of the world
+        try {
+            topLeftLatRef = parseDouble(topLeftLatEditText.getText().toString());
+        }
+        catch (Exception e) {
+            topLeftLatRef = 85.0; //top left x
+        }
+        try {
+            topLeftLongRef = parseDouble(topLeftLongEditText.getText().toString());;
+        }
+        catch (Exception e) {
+            topLeftLongRef = -180.0; //top left y
+        }
+        // Bottom right corner of the world
+        try {
+            bottomRightLatRef = parseDouble(bottomRightLatEditText.getText().toString());
+        }
+        catch (Exception e) {
+            bottomRightLatRef = -85.0; //bot right x
+        }
+
+        try {
+            bottomRightLongRef = parseDouble(bottomRightLongEditText.getText().toString());
+        }
+        catch (Exception e) {
+            bottomRightLongRef = 180.0; //bot right y
+        }
+
+        // Debug log
         Log.d("SearchActivity", "searchForLocationClick: topLeftLatRef: " + topLeftLatRef);
         Log.d("SearchActivity", "searchForLocationClick: topLeftLongRef: " + topLeftLongRef);
         Log.d("SearchActivity", "searchForLocationClick: bottomRightLatRef: " + bottomRightLatRef);

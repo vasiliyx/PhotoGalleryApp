@@ -2,8 +2,16 @@ package com.example.cameragalleryapp.supportpackage;
 
 import com.example.cameragalleryapp.ImageData;
 import org.junit.Test;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.After;
+import org.junit.Assert;
+import junit.framework.JUnit4TestAdapter;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

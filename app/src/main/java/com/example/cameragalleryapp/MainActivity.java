@@ -1,5 +1,7 @@
 package com.example.cameragalleryapp;
 
+//TODO allow for both network and gps locations
+
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -71,8 +73,8 @@ public class MainActivity extends AppCompatActivity {
 
         // If permission is granted then attempting to use GPS //todo ask tej about how it exactly works
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
             }
         }
     }
@@ -137,15 +139,15 @@ public class MainActivity extends AppCompatActivity {
         };
 
         // Checks if permission is granted, if not it will default and take permission
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
         }
         else
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
 
         // If location disabled, will alert user to enable location
         // It will redirect to the settings page, where user manually turns it on
-        if (!(locationManager.isProviderEnabled((LocationManager.GPS_PROVIDER)))) {
+        if (!(locationManager.isProviderEnabled((LocationManager.NETWORK_PROVIDER)))) {
             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
             builder.setTitle("Location Settings");
             builder.setMessage(Html.fromHtml("<font color='#101010'>Please enable location.</font>")); //changes the text color too

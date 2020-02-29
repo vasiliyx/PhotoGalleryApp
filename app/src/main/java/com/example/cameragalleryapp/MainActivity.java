@@ -326,78 +326,22 @@ public class MainActivity extends AppCompatActivity {
         return image;
     }
 
-
-    // todo need to include the caption that comes with the image
-    // Share image via intent to wake up social media app installed on device
-    public void uploadPhotoClick (View v) {
+    public void uploadPhotoClick(View v) {
         Log.d("MainActivity", "uploadPhotoClick: called");
-        final Button uploadPhotoButton = findViewById(R.id.uploadPhotoButton); //to enable/disable button
 
-        // Get the total number of images form the list. This is different from imageCount.
-        int numberOfImages = fileShortNameList.size();
-
-        // When there are images in the list
-        if (numberOfImages > 0){
-            // Check if app is installed
-            String packageName = "com.facebook.katana"; //facebook app package name (not messenger)
-            final boolean packageInstalled = isPackageInstalled(packageName, this);
-            Log.i("MainActivity", "uploadPhotoClick: Package installed = " + packageInstalled);
-
-            // File path to invoke intent
-            String imageFileName = fileShortNameList.get(currentlyDisplayedImageIndex) + ".jpg";
-            String mPath = myStoragePath + "/" + imageFileName;
-
-            // Create an intent type that is used to send to social media platforms or any other app
-            Intent share = new Intent(Intent.ACTION_SEND);
-            share.setType("image/jpeg"); //default image type
-            share.putExtra(Intent.EXTRA_STREAM,Uri.parse(mPath)); //parse the string to include only file path
-            share.putExtra(Intent.EXTRA_TEXT, "I sent you an image, here is the text."); //on Whatsapp, this is seen under the image
-            share.putExtra(Intent.EXTRA_TITLE,"Sent you a title" );
-            share.putExtra(Intent.EXTRA_SUBJECT,"Sent you a subject" );
-//        share.setPackage(packageName); //comment this out if you want to share via any app
-
-            // Change what the upload button reads and notify the user the upload processing has begun
-            uploadPhotoButton.setEnabled(false);
-            Toast.makeText(this, "Uploading...", Toast.LENGTH_SHORT).show();
-            uploadPhotoButton.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    uploadPhotoButton.setEnabled(true);
-                }
-            }, 1000);
-
-            startActivityForResult(Intent.createChooser(share, "Share The Image Via"),SHARE_PIC_REQUEST);
-        }
-
-        // When there no images in the list, display default
-        else if (numberOfImages == 0){
-            uploadPhotoButton.setEnabled(false);
-        }
-
-
-
+        // Open another activity to choose upload method
+        startActivity(new Intent(this, UploadPhotoActivity.class)
+                .putExtra("index", currentlyDisplayedImageIndex) //needs the index of the image
+                .putExtra("location", myStoragePath));                   //as well as the location
     }
 
-
-    // Check to see if Social Media Application is installed
-    private boolean isPackageInstalled(String packageName, Context context) {
-        PackageManager pm = context.getPackageManager();
-        try {
-            pm.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES);
-            return true;
-        } catch (PackageManager.NameNotFoundException e) {
-            return false;
-        }
-    }
-
-
-    // TODO implement this later when using gridview
-    // Show all the images
-    public void viewPhotoClick (View v) {
-        Log.d("MainActivity","viewPhotoClick: called");
-        Intent intent = new Intent(this, ViewPhotoActivity.class);
-        startActivity(intent);
-    }
+//    // TODO implement this later when using gridview
+//    // Show all the images
+//    public void viewPhotoClick (View v) {
+//        Log.d("MainActivity","viewPhotoClick: called");
+//        Intent intent = new Intent(this, UploadPhotoActivity.class);
+//        startActivity(intent);
+//    }
 
 
     public void scrollPhotoLeftClick(View v) {

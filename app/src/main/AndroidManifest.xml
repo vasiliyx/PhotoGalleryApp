@@ -21,7 +21,7 @@
             android:name=".SearchActivity"
             android:label="Search Photos"></activity>
         <activity
-            android:name=".ViewPhotoActivity"
+            android:name=".UploadPhotoActivity"
             android:label="View Photos" />
         <activity
             android:name=".MainActivity"

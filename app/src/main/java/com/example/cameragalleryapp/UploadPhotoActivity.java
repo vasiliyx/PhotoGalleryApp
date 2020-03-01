@@ -96,6 +96,14 @@ public class UploadPhotoActivity extends AppCompatActivity {
 
         // WRITE CODE HERE
 
+        // Get the total number of images form the list. This is different from imageCount.
+        int numberOfImages = fileShortNameList.size();
+
+        // When there are images in the list
+        if (numberOfImages > 0){
+            Log.d("MainActivity", "serverClick: items to be writen to server");
+
+        }
 
 
 

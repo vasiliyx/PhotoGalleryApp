@@ -5,30 +5,46 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.jar.Attributes;
 
 import static com.example.cameragalleryapp.MainActivity.SHARE_PIC_REQUEST;
 import static com.example.cameragalleryapp.MainActivity.currentlyDisplayedImageIndex;
 import static com.example.cameragalleryapp.MainActivity.fileShortNameList;
 
+
 // Uploads photos to social
 public class UploadPhotoActivity extends AppCompatActivity {
 
-    static final String serverURL = "localhost:8080/camServer";
 
+    //UploadToServerTask task = new UploadToServerTask();
+    //task.execute(new String[] { "https://www.bcit.ca" }); //for http lab
+    //task.execute(new String[] { "http://10.0.2.2:8080/midp/hits" }); //for webapp lab using emulator
+    // task.execute(new String[] { "http://142.232.61.32:8080/PhotoGallery/hits" }); //for webapp lab using phone
+    private static final String SERVER_ADDRESS = "localhost:8081/PhotoGallery";
+//^^server address
 
     static int tempIndex = 0;
     static int currentlyDisplayedImageIndex = 0; // Used for displaying the image from the list
@@ -116,16 +132,20 @@ public class UploadPhotoActivity extends AppCompatActivity {
         // When there are images in the list
         if (numberOfImages > 0){
             Log.d("MainActivity", "serverClick: items to be writen to server");
-            Log.d("MainActivity", "serverClick: server" + serverURL);
+
+            new UploadImage(image, uploadImageName.getText().toString());
+            
+
 
 
         }
         else{
 
-            UploadToServerTask task = new UploadToServerTask();
-            //task.execute(new String[] { "https://www.bcit.ca" }); //for http lab
-            //task.execute(new String[] { "http://10.0.2.2:8080/midp/hits" }); //for webapp lab using emulator
-            task.execute(new String[] { "http://142.232.61.32:8080/PhotoGallery/hits" }); //for webapp lab using phone
+            //we have no pictures
+            Log.d("MainActivity", "serverClick: we have no items to be writen to server");
+           //call asynch task to upload images
+
+
         }
 
 
@@ -145,53 +165,57 @@ public class UploadPhotoActivity extends AppCompatActivity {
         }, 1000);
     }
 
-    private class UploadToServerTask extends AsyncTask<String, Void, String> {
-        @Override
-        protected String doInBackground(String... urls) {
-            String response = "";
-            BufferedReader br = null;
-            HttpURLConnection urlConnection = null;
-            BufferedReader reader = null;
-            try {
-                URL url = new URL(urls[0]);
-                urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setRequestMethod("PUT");
-                urlConnection.connect();
-                InputStream inputStream = urlConnection.getInputStream();
-                StringBuffer buffer = new StringBuffer();
-                if (inputStream == null) {
-                    return null;
-                }
-                br = new BufferedReader(new InputStreamReader(inputStream));
-                String line = null;
-                while ((line = br.readLine()) != null) {
-                    response += line;
-                }
-                if (response.length() == 0) {
-                    return null;
-                }
-                br.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally{
-                if (urlConnection != null) {
-                    urlConnection.disconnect();
-                }
-                if (reader != null) {
-                    try {
-                        br.close();
-                    } catch (final IOException e) {
-                        Log.e("PlaceholderFragment", "Error closing stream", e);
-                    }
-                }
-            }
-            return response;
+
+
+    private class UploadImage extends AsyncTask< Void, Void, Void>{
+
+        Bitmap image;
+        String name;
+
+        public UploadImage(Bitmap image, String name){
+            this.image = image;
+            this.name = name;
         }
         @Override
-        protected void onPostExecute(String result) {
-            Log.d("MainActivity", "serverClick: server" + result);
+        protected Void doInBackground(Void... voids) {
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            image.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+            String encodedImage = Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
+
+            ArrayList<NameValuePair> dataToSend = new ArrayList<>();
+            dataToSend.add(new BasicNameValuePair ("image", encodedImage);
+            dataToSend.add(new BasicNameValuePair("name", name));
+
+            HttpParams httpRequestParams= getHttpRequestParams();
+            HttpClient client = new DefaultHttpClient(httpRequestParams);
+            HttpPost post = new HttpPost(SERVER_ADDRESS+ "/SavePicture");
+            try{
+                post.setEntity(new UrlEncodedFormEntity(dataToSend));
+                client.execute(post);
+
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected Void onPostExecute(Void aVoid){
+
+            super.onPostExecute(aVoid);
+            Toast.makeText(getApplicationContext(),"Image Uploaded", Toast.LENGTH_SHORT).show();
+
         }
     }
+
+    private HttpParams getHttpRequestParams(){
+        HttpParams httpRequestParams = new BasicHttpParams();
+        HttpConnectionParams.setConnectionTimeout(httpRequestParams, 1000 * 30);
+        HttpConnectionParams.setSoTimeout(httpRequestParams, 1000 * 30);
+        return httpRequestParams;
+
+    }
+
 
     // Check to see if Social Media Application is installed
     private boolean isPackageInstalled(String packageName, Context context) {

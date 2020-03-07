@@ -159,7 +159,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
             try {
                // if (file_extn.equals("img") || file_extn.equals("jpg") || file_extn.equals("jpeg") || file_extn.equals("gif") || file_extn.equals("png")) {
                     //FINE
-                    HttpClient httpclient = new DefaultHttpClient();//maybe this is an older library?? 
+                    HttpClient httpclient = new DefaultHttpClient();//maybe this is an older library??
                     HttpPost httppost = new HttpPost("LINK TO SERVER");
 
               //  } else {

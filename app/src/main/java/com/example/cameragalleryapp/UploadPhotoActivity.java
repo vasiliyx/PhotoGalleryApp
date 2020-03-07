@@ -22,6 +22,7 @@ import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -29,6 +30,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.jar.Attributes;
+
+
 
 import static com.example.cameragalleryapp.MainActivity.SHARE_PIC_REQUEST;
 import static com.example.cameragalleryapp.MainActivity.currentlyDisplayedImageIndex;
@@ -129,13 +132,43 @@ public class UploadPhotoActivity extends AppCompatActivity {
         // Get the total number of images form the list. This is different from imageCount.
         int numberOfImages = fileShortNameList.size();
 
+
+        // Put string into proper format for the datatype
+        String imageFileName = fileShortNameList.get(currentlyDisplayedImageIndex) + ".jpg"; //image
+        String dataFileName = fileShortNameList.get(currentlyDisplayedImageIndex) + ".dat"; //image data - location, timestamp, keyword
+        String mPath = myStoragePath + "/" + imageFileName;
+
+        String uploadImageName= mPath;
+        String image=imageFileName;
         // When there are images in the list
         if (numberOfImages > 0){
             Log.d("MainActivity", "serverClick: items to be writen to server");
 
-            new UploadImage(image, uploadImageName.getText().toString());
-            
+           // new UploadImage(image, uploadImageName); //
 
+            Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+            photoPickerIntent.setType("image/*");
+            startActivityForResult(photoPickerIntent, 1);
+
+            Uri selectedImage = Uri.fromFile(new File(mPath));
+
+            //String filePath = getPath(selectedImage);
+            //String file_extn = mPath.substring(mPath.lastIndexOf(".") + 1);
+            //image_name_tv.setText(mPath);
+
+            try {
+               // if (file_extn.equals("img") || file_extn.equals("jpg") || file_extn.equals("jpeg") || file_extn.equals("gif") || file_extn.equals("png")) {
+                    //FINE
+                    HttpClient httpclient = new DefaultHttpClient();//maybe this is an older library?? 
+                    HttpPost httppost = new HttpPost("LINK TO SERVER");
+
+              //  } else {
+                    //NOT IN REQUIRED FORMAT
+               // }
+            } catch (FileNotFoundException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
 
 
         }
@@ -166,55 +199,91 @@ public class UploadPhotoActivity extends AppCompatActivity {
     }
 
 
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (requestCode == 1)
+//            if (resultCode == Activity.RESULT_OK) {
+//                Uri selectedImage = data.getData();
+//
+//                String filePath = getPath(selectedImage);
+//                String file_extn = filePath.substring(filePath.lastIndexOf(".") + 1);
+//                image_name_tv.setText(filePath);
+//
+//                try {
+//                    if (file_extn.equals("img") || file_extn.equals("jpg") || file_extn.equals("jpeg") || file_extn.equals("gif") || file_extn.equals("png")) {
+//                        //FINE
+//                    } else {
+//                        //NOT IN REQUIRED FORMAT
+//                    }
+//                } catch (FileNotFoundException e) {
+//                    // TODO Auto-generated catch block
+//                    e.printStackTrace();
+//                }
+//            }
+//    }
 
-    private class UploadImage extends AsyncTask< Void, Void, Void>{
+//    public String getPath(Uri uri) {
+//        String[] projection = {MediaColumns.DATA};
+//        Cursor cursor = managedQuery(uri, projection, null, null, null);
+//        column_index = cursor
+//                .getColumnIndexOrThrow(MediaColumns.DATA);
+//        cursor.moveToFirst();
+//        imagePath = cursor.getString(column_index);
+//
+//        return cursor.getString(column_index);
+//    }
 
-        Bitmap image;
-        String name;
 
-        public UploadImage(Bitmap image, String name){
-            this.image = image;
-            this.name = name;
-        }
-        @Override
-        protected Void doInBackground(Void... voids) {
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            image.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-            String encodedImage = Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
-
-            ArrayList<NameValuePair> dataToSend = new ArrayList<>();
-            dataToSend.add(new BasicNameValuePair ("image", encodedImage);
-            dataToSend.add(new BasicNameValuePair("name", name));
-
-            HttpParams httpRequestParams= getHttpRequestParams();
-            HttpClient client = new DefaultHttpClient(httpRequestParams);
-            HttpPost post = new HttpPost(SERVER_ADDRESS+ "/SavePicture");
-            try{
-                post.setEntity(new UrlEncodedFormEntity(dataToSend));
-                client.execute(post);
-
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected Void onPostExecute(Void aVoid){
-
-            super.onPostExecute(aVoid);
-            Toast.makeText(getApplicationContext(),"Image Uploaded", Toast.LENGTH_SHORT).show();
-
-        }
-    }
-
-    private HttpParams getHttpRequestParams(){
-        HttpParams httpRequestParams = new BasicHttpParams();
-        HttpConnectionParams.setConnectionTimeout(httpRequestParams, 1000 * 30);
-        HttpConnectionParams.setSoTimeout(httpRequestParams, 1000 * 30);
-        return httpRequestParams;
-
-    }
+//
+//    private class UploadImage extends AsyncTask< Void, Void, Void>{
+//
+//        Bitmap image;
+//        String name;
+//
+//        public UploadImage(Bitmap image, String name){
+//            this.image = image;
+//            this.name = name;
+//        }
+//        @Override
+//        protected Void doInBackground(Void... voids) {
+//            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+//            image.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+//            String encodedImage = Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
+//
+//            ArrayList<NameValuePair> dataToSend = new ArrayList<>();
+//            dataToSend.add(new BasicNameValuePair ("image", encodedImage);
+//            dataToSend.add(new BasicNameValuePair("name", name));
+//
+//            HttpParams httpRequestParams= getHttpRequestParams();
+//            HttpClient client = new DefaultHttpClient(httpRequestParams);
+//            HttpPost post = new HttpPost(SERVER_ADDRESS+ "/SavePicture");
+//            try{
+//                post.setEntity(new UrlEncodedFormEntity(dataToSend));
+//                client.execute(post);
+//
+//            }catch (Exception e){
+//                e.printStackTrace();
+//            }
+//            return null;
+//        }
+//
+//        @Override
+//        protected Void onPostExecute(Void aVoid){
+//
+//            super.onPostExecute(aVoid);
+//            Toast.makeText(getApplicationContext(),"Image Uploaded", Toast.LENGTH_SHORT).show();
+//
+//        }
+//    }
+//
+//    private HttpParams getHttpRequestParams(){
+//        HttpParams httpRequestParams = new BasicHttpParams();
+//        HttpConnectionParams.setConnectionTimeout(httpRequestParams, 1000 * 30);
+//        HttpConnectionParams.setSoTimeout(httpRequestParams, 1000 * 30);
+//        return httpRequestParams;
+//
+//    }
 
 
     // Check to see if Social Media Application is installed

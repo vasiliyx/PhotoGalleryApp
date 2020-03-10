@@ -1,7 +1,5 @@
 package com.example.cameragalleryapp;
 
-//TODO allow for both network and gps locations
-
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -73,8 +71,8 @@ public class MainActivity extends AppCompatActivity {
 
         // If permission is granted then attempting to use GPS //todo ask tej about how it exactly works
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
             }
         }
     }
@@ -139,15 +137,15 @@ public class MainActivity extends AppCompatActivity {
         };
 
         // Checks if permission is granted, if not it will default and take permission
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
         else
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
 
         // If location disabled, will alert user to enable location
         // It will redirect to the settings page, where user manually turns it on
-        if (!(locationManager.isProviderEnabled((LocationManager.NETWORK_PROVIDER)))) {
+        if (!(locationManager.isProviderEnabled((LocationManager.GPS_PROVIDER)))) {
             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
             builder.setTitle("Location Settings");
             builder.setMessage(Html.fromHtml("<font color='#101010'>Please enable location.</font>")); //changes the text color too
@@ -326,22 +324,78 @@ public class MainActivity extends AppCompatActivity {
         return image;
     }
 
-    public void uploadPhotoClick(View v) {
-        Log.d("MainActivity", "uploadPhotoClick: called");
 
-        // Open another activity to choose upload method
-        startActivity(new Intent(this, UploadPhotoActivity.class)
-                .putExtra("index", currentlyDisplayedImageIndex) //needs the index of the image
-                .putExtra("location", myStoragePath));                   //as well as the location
+    // todo need to include the caption that comes with the image
+    // Share image via intent to wake up social media app installed on device
+    public void uploadPhotoClick (View v) {
+        Log.d("MainActivity", "uploadPhotoClick: called");
+        final Button uploadPhotoButton = findViewById(R.id.uploadPhotoButton); //to enable/disable button
+
+        // Get the total number of images form the list. This is different from imageCount.
+        int numberOfImages = fileShortNameList.size();
+
+        // When there are images in the list
+        if (numberOfImages > 0){
+            // Check if app is installed
+            String packageName = "com.facebook.katana"; //facebook app package name (not messenger)
+            final boolean packageInstalled = isPackageInstalled(packageName, this);
+            Log.i("MainActivity", "uploadPhotoClick: Package installed = " + packageInstalled);
+
+            // File path to invoke intent
+            String imageFileName = fileShortNameList.get(currentlyDisplayedImageIndex) + ".jpg";
+            String mPath = myStoragePath + "/" + imageFileName;
+
+            // Create an intent type that is used to send to social media platforms or any other app
+            Intent share = new Intent(Intent.ACTION_SEND);
+            share.setType("image/jpeg"); //default image type
+            share.putExtra(Intent.EXTRA_STREAM,Uri.parse(mPath)); //parse the string to include only file path
+            share.putExtra(Intent.EXTRA_TEXT, "I sent you an image, here is the text."); //on Whatsapp, this is seen under the image
+            share.putExtra(Intent.EXTRA_TITLE,"Sent you a title" );
+            share.putExtra(Intent.EXTRA_SUBJECT,"Sent you a subject" );
+//        share.setPackage(packageName); //comment this out if you want to share via any app
+
+            // Change what the upload button reads and notify the user the upload processing has begun
+            uploadPhotoButton.setEnabled(false);
+            Toast.makeText(this, "Uploading...", Toast.LENGTH_SHORT).show();
+            uploadPhotoButton.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    uploadPhotoButton.setEnabled(true);
+                }
+            }, 1000);
+
+            startActivityForResult(Intent.createChooser(share, "Share The Image Via"),SHARE_PIC_REQUEST);
+        }
+
+        // When there no images in the list, display default
+        else if (numberOfImages == 0){
+            uploadPhotoButton.setEnabled(false);
+        }
+
+
+
     }
 
-//    // TODO implement this later when using gridview
-//    // Show all the images
-//    public void viewPhotoClick (View v) {
-//        Log.d("MainActivity","viewPhotoClick: called");
-//        Intent intent = new Intent(this, UploadPhotoActivity.class);
-//        startActivity(intent);
-//    }
+
+    // Check to see if Social Media Application is installed
+    private boolean isPackageInstalled(String packageName, Context context) {
+        PackageManager pm = context.getPackageManager();
+        try {
+            pm.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
+    }
+
+
+    // TODO implement this later when using gridview
+    // Show all the images
+    public void viewPhotoClick (View v) {
+        Log.d("MainActivity","viewPhotoClick: called");
+        Intent intent = new Intent(this, ViewPhotoActivity.class);
+        startActivity(intent);
+    }
 
 
     public void scrollPhotoLeftClick(View v) {

@@ -32,6 +32,20 @@ import java.util.ArrayList;
 import java.util.jar.Attributes;
 
 
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.util.Log;
+import android.widget.Toast;
+
+//import com.yai.app.support.DialogHandler;
+
 
 import static com.example.cameragalleryapp.MainActivity.SHARE_PIC_REQUEST;
 import static com.example.cameragalleryapp.MainActivity.currentlyDisplayedImageIndex;
@@ -46,7 +60,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
     //task.execute(new String[] { "https://www.bcit.ca" }); //for http lab
     //task.execute(new String[] { "http://10.0.2.2:8080/midp/hits" }); //for webapp lab using emulator
     // task.execute(new String[] { "http://142.232.61.32:8080/PhotoGallery/hits" }); //for webapp lab using phone
-    private static final String SERVER_ADDRESS = "localhost:8081/PhotoGallery";
+    private static final String serverUploadAddress = "localhost:8081/PhotoGalleryUpload";
 //^^server address
 
     static int tempIndex = 0;
@@ -143,33 +157,11 @@ public class UploadPhotoActivity extends AppCompatActivity {
         // When there are images in the list
         if (numberOfImages > 0){
             Log.d("MainActivity", "serverClick: items to be writen to server");
+            int serverResponseCode = 0;
 
-           // new UploadImage(image, uploadImageName); //
-
-            Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-            photoPickerIntent.setType("image/*");
-            startActivityForResult(photoPickerIntent, 1);
-
-            Uri selectedImage = Uri.fromFile(new File(mPath));
-
-            //String filePath = getPath(selectedImage);
-            //String file_extn = mPath.substring(mPath.lastIndexOf(".") + 1);
-            //image_name_tv.setText(mPath);
-
-            try {
-               // if (file_extn.equals("img") || file_extn.equals("jpg") || file_extn.equals("jpeg") || file_extn.equals("gif") || file_extn.equals("png")) {
-                    //FINE
-                    HttpClient httpclient = new DefaultHttpClient();//maybe this is an older library??
-                    HttpPost httppost = new HttpPost("LINK TO SERVER");
-
-              //  } else {
-                    //NOT IN REQUIRED FORMAT
-               // }
-            } catch (FileNotFoundException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-
+            // public int uploadFile(final String sourceFileUri, final String upLoadServerUri, final String renameFile) {
+            //
+           int response = uploadFile(mPath, serverUploadAddress , imageFileName);
 
         }
         else{
@@ -199,92 +191,6 @@ public class UploadPhotoActivity extends AppCompatActivity {
     }
 
 
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == 1)
-//            if (resultCode == Activity.RESULT_OK) {
-//                Uri selectedImage = data.getData();
-//
-//                String filePath = getPath(selectedImage);
-//                String file_extn = filePath.substring(filePath.lastIndexOf(".") + 1);
-//                image_name_tv.setText(filePath);
-//
-//                try {
-//                    if (file_extn.equals("img") || file_extn.equals("jpg") || file_extn.equals("jpeg") || file_extn.equals("gif") || file_extn.equals("png")) {
-//                        //FINE
-//                    } else {
-//                        //NOT IN REQUIRED FORMAT
-//                    }
-//                } catch (FileNotFoundException e) {
-//                    // TODO Auto-generated catch block
-//                    e.printStackTrace();
-//                }
-//            }
-//    }
-
-//    public String getPath(Uri uri) {
-//        String[] projection = {MediaColumns.DATA};
-//        Cursor cursor = managedQuery(uri, projection, null, null, null);
-//        column_index = cursor
-//                .getColumnIndexOrThrow(MediaColumns.DATA);
-//        cursor.moveToFirst();
-//        imagePath = cursor.getString(column_index);
-//
-//        return cursor.getString(column_index);
-//    }
-
-
-//
-//    private class UploadImage extends AsyncTask< Void, Void, Void>{
-//
-//        Bitmap image;
-//        String name;
-//
-//        public UploadImage(Bitmap image, String name){
-//            this.image = image;
-//            this.name = name;
-//        }
-//        @Override
-//        protected Void doInBackground(Void... voids) {
-//            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-//            image.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-//            String encodedImage = Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
-//
-//            ArrayList<NameValuePair> dataToSend = new ArrayList<>();
-//            dataToSend.add(new BasicNameValuePair ("image", encodedImage);
-//            dataToSend.add(new BasicNameValuePair("name", name));
-//
-//            HttpParams httpRequestParams= getHttpRequestParams();
-//            HttpClient client = new DefaultHttpClient(httpRequestParams);
-//            HttpPost post = new HttpPost(SERVER_ADDRESS+ "/SavePicture");
-//            try{
-//                post.setEntity(new UrlEncodedFormEntity(dataToSend));
-//                client.execute(post);
-//
-//            }catch (Exception e){
-//                e.printStackTrace();
-//            }
-//            return null;
-//        }
-//
-//        @Override
-//        protected Void onPostExecute(Void aVoid){
-//
-//            super.onPostExecute(aVoid);
-//            Toast.makeText(getApplicationContext(),"Image Uploaded", Toast.LENGTH_SHORT).show();
-//
-//        }
-//    }
-//
-//    private HttpParams getHttpRequestParams(){
-//        HttpParams httpRequestParams = new BasicHttpParams();
-//        HttpConnectionParams.setConnectionTimeout(httpRequestParams, 1000 * 30);
-//        HttpConnectionParams.setSoTimeout(httpRequestParams, 1000 * 30);
-//        return httpRequestParams;
-//
-//    }
-
 
     // Check to see if Social Media Application is installed
     private boolean isPackageInstalled(String packageName, Context context) {
@@ -297,4 +203,139 @@ public class UploadPhotoActivity extends AppCompatActivity {
         }
     }
 
+
+    public int uploadFile(final String sourceFileUri, final String upLoadServerUri, final String renameFile) {
+        int serverResponseCode = 0;
+        HttpURLConnection conn = null;
+        DataOutputStream dos = null;
+        String lineEnd = "\r\n";
+        String twoHyphens = "--";
+        String boundary = "*****";
+        int bytesRead, bytesAvailable, bufferSize;
+        byte[] buffer;
+        int maxBufferSize = 1 * 1024 * 1024;
+        File sourceFile = new File(sourceFileUri);
+
+        if (!sourceFile.isFile()) {
+            //dialog.dismiss();
+
+            Log.e("uploadFile", "Source File not exist : " + sourceFileUri);
+
+           // activity.runOnUiThread(new Runnable() {
+//                public void run() {
+//                    new DialogHandler().customDialog(activity, "ERROR", "Source File not exist : " + sourceFileUri);
+//                }
+           // });
+
+            return 0;
+
+        }
+        else{
+
+            try {
+                // open a URL connection to the Servlet
+                FileInputStream fileInputStream = new FileInputStream(sourceFile);
+                URL url = new URL(upLoadServerUri);
+
+                // Open a HTTP  connection to  the URL
+                conn = (HttpURLConnection) url.openConnection();
+                conn.setDoInput(true); // Allow Inputs
+                conn.setDoOutput(true); // Allow Outputs
+                conn.setUseCaches(false); // Don't use a Cached Copy
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Connection", "Keep-Alive");
+                conn.setRequestProperty("ENCTYPE", "multipart/form-data");
+                conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
+
+                conn.setRequestProperty("uploaded_file", renameFile);
+
+                dos = new DataOutputStream(conn.getOutputStream());
+
+                // add parameters
+                dos.writeBytes(twoHyphens + boundary + lineEnd);
+                dos.writeBytes("Content-Disposition: form-data; name=\"type\""
+                        + lineEnd);
+                dos.writeBytes(lineEnd);
+
+                // assign value
+                dos.writeBytes("Your value");
+                dos.writeBytes(lineEnd);
+                dos.writeBytes(twoHyphens + boundary + lineEnd);
+
+                // send image
+                dos.writeBytes(twoHyphens + boundary + lineEnd);
+                dos.writeBytes("Content-Disposition: form-data; name='uploaded_file';filename='"
+                        + renameFile + "'" + lineEnd);
+
+                dos.writeBytes(lineEnd);
+
+                // create a buffer of  maximum size
+                bytesAvailable = fileInputStream.available();
+
+                bufferSize = Math.min(bytesAvailable, maxBufferSize);
+                buffer = new byte[bufferSize];
+
+                // read file and write it into form...
+                bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+
+                while (bytesRead > 0) {
+                    dos.write(buffer, 0, bufferSize);
+                    bytesAvailable = fileInputStream.available();
+                    bufferSize = Math.min(bytesAvailable, maxBufferSize);
+                    bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+                }
+
+                // send multipart form data necesssary after file data...
+                dos.writeBytes(lineEnd);
+                dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
+
+                // Responses from the server (code and message)
+                serverResponseCode = conn.getResponseCode();
+                String serverResponseMessage = conn.getResponseMessage();
+
+                Log.i("uploadFile", "HTTP Response is : " + serverResponseMessage + ": " + serverResponseCode);
+
+                if(serverResponseCode == 200){
+                    Log.e("Upload file to server",  "File Upload Completed.");
+//                    activity.runOnUiThread(new Runnable() {
+//                        public void run() {
+//                            String message = "File Upload Completed.";
+//                            Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
+//                        }
+//                    });
+                }
+
+                //close the streams //
+                fileInputStream.close();
+                dos.flush();
+                dos.close();
+
+            } catch (MalformedURLException ex) {
+//                dialog.dismiss();
+//                ex.printStackTrace();
+//
+//                activity.runOnUiThread(new Runnable() {
+//                    public void run() {
+//                        Toast.makeText(activity, "MalformedURLException : : check script url.", Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+
+                Log.e("Upload file to server", "error: " + ex.getMessage(), ex);
+            } catch (Exception e) {
+//                dialog.dismiss();
+//                e.printStackTrace();
+//
+//                activity.runOnUiThread(new Runnable() {
+//                    public void run() {
+//                        Toast.makeText(activity, "Got Exception : see logcat ", Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+
+                Log.e("Upload file to server", "Exception : " + e.getMessage(), e);
+            }
+            //dialog.dismiss();
+            return serverResponseCode;
+
+        }
+    }
 }

@@ -60,7 +60,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
     //task.execute(new String[] { "https://www.bcit.ca" }); //for http lab
     //task.execute(new String[] { "http://10.0.2.2:8080/midp/hits" }); //for webapp lab using emulator
     // task.execute(new String[] { "http://142.232.61.32:8080/PhotoGallery/hits" }); //for webapp lab using phone
-    private static final String serverUploadAddress = "localhost:8081/PhotoGalleryUpload";
+    private static final String serverUploadAddress = "http://10.0.2.2:8081/servletFileUploader/androidUpload";
 //^^server address
 
     static int tempIndex = 0;

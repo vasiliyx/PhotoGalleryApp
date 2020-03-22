@@ -54,7 +54,7 @@ import static com.example.cameragalleryapp.MainActivity.fileShortNameList;
 
 // Uploads photos to social
 public class UploadPhotoActivity extends AppCompatActivity {
-
+    private static final String TAG = "UploadPhotoActivity";
 
     //UploadToServerTask task = new UploadToServerTask();
     //task.execute(new String[] { "https://www.bcit.ca" }); //for http lab
@@ -156,18 +156,18 @@ public class UploadPhotoActivity extends AppCompatActivity {
         String image=imageFileName;
         // When there are images in the list
         if (numberOfImages > 0){
-            Log.d("MainActivity", "serverClick: items to be writen to server");
+            Log.i("MainActivity", "serverClick: items to be written to server");
             int serverResponseCode = 0;
 
             // public int uploadFile(final String sourceFileUri, final String upLoadServerUri, final String renameFile) {
             //
            int response = uploadFile(mPath, serverUploadAddress , imageFileName);
-
+            Log.i(TAG, "serverClick: " + response);
         }
         else{
 
             //we have no pictures
-            Log.d("MainActivity", "serverClick: we have no items to be writen to server");
+            Log.i("MainActivity", "serverClick: we have no items to be written to server");
            //call asynch task to upload images
 
 

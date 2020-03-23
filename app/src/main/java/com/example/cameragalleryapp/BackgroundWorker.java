@@ -62,7 +62,8 @@ public class BackgroundWorker extends AsyncTask<String,Void,String> { //generics
         String mPath = params[3]; //source file
         //String login_url = "http://10.0.2.2/login.php";         //local host ip
         String login_url = "http://24.84.210.161:8080/remote_login.php"; //server address URL
-        String serverUploadAddress = "http://10.0.2.2:8081/servletFileUploader/androidUpload";
+//        String serverUploadAddress = "http://10.0.2.2:8081/servletFileUploader/androidUpload";
+        String serverUploadAddress = "http://10.0.2.2:8081/servletFileUploader/upload";
 //        String serverUploadAddress = "http://google.ca";
 
         int serverResponseCode = 0;
@@ -82,7 +83,7 @@ public class BackgroundWorker extends AsyncTask<String,Void,String> { //generics
             //post some data
             try {
                 FileInputStream fileInputStream = new FileInputStream(sourceFile);
-                URL url = new URL(login_url);
+                URL url = new URL(serverUploadAddress);
 
                 // Open a HTTP  connection to  the URL
                 httpURLConnection = (HttpURLConnection)url.openConnection();

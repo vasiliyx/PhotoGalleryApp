@@ -62,16 +62,18 @@ public class BackgroundWorker extends AsyncTask<String,Void,String> { //generics
         String mPath = params[3]; //source file
         //String login_url = "http://10.0.2.2/login.php";         //local host ip
         String login_url = "http://24.84.210.161:8080/remote_login.php"; //server address URL
-//        String serverUploadAddress = "http://10.0.2.2:8081/servletFileUploader/androidUpload";
-        String serverUploadAddress = "http://10.0.2.2:8081/servletFileUploader/upload";
+        String serverUploadAddress = "http://10.0.2.2:8081/servletFileUploader/androidUpload";
+//        String serverUploadAddress = "http://10.0.2.2:8081/servletFileUploader/upload";
 //        String serverUploadAddress = "http://google.ca";
 
         int serverResponseCode = 0;
         HttpURLConnection httpURLConnection = null;
         DataOutputStream dataOutputStream = null;
+        InputStream inputStream = null;
         String lineEnd = "\r\n";
         String twoHyphens = "--";
         String boundary = "*****";
+        String result = "";
         int bytesRead, bytesAvailable, bufferSize;
         byte[] buffer;
         int maxBufferSize = 1 * 1024 * 1024;
@@ -94,6 +96,7 @@ public class BackgroundWorker extends AsyncTask<String,Void,String> { //generics
                 httpURLConnection.setRequestMethod("POST");
                 httpURLConnection.setRequestProperty("Connection", "Keep-Alive");
                 httpURLConnection.setRequestProperty("ENCTYPE", "multipart/form-data");
+                httpURLConnection.setRequestProperty("User-Agent", "Android Multipart HTTP Client 1.0");
                 httpURLConnection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
                 httpURLConnection.setRequestProperty("uploaded_file", imageFileName);
 
@@ -102,8 +105,7 @@ public class BackgroundWorker extends AsyncTask<String,Void,String> { //generics
 
                 // add parameters
                 dataOutputStream.writeBytes(twoHyphens + boundary + lineEnd);
-                dataOutputStream.writeBytes("Content-Disposition: form-data; name=\"type\""
-                        + lineEnd);
+                dataOutputStream.writeBytes("Content-Disposition: form-data; name=\"type\"" + lineEnd);
                 dataOutputStream.writeBytes(lineEnd);
 
                 // assign value
@@ -126,7 +128,6 @@ public class BackgroundWorker extends AsyncTask<String,Void,String> { //generics
 
                 // read file and write it into form...
                 bytesRead = fileInputStream.read(buffer, 0, bufferSize);
-
                 while (bytesRead > 0) {
                     dataOutputStream.write(buffer, 0, bufferSize);
                     bytesAvailable = fileInputStream.available();
@@ -134,24 +135,33 @@ public class BackgroundWorker extends AsyncTask<String,Void,String> { //generics
                     bytesRead = fileInputStream.read(buffer, 0, bufferSize);
                 }
 
-                // send multipart form data necesssary after file data...
+                // send multipart form data necessary after file data...
                 dataOutputStream.writeBytes(lineEnd);
                 dataOutputStream.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
 
                 // Responses from the server (code and message)
                 serverResponseCode = httpURLConnection.getResponseCode();
                 String serverResponseMessage = httpURLConnection.getResponseMessage();
-
                 Log.i("uploadFile", "HTTP Response is : " + serverResponseMessage + ": " + serverResponseCode);
+
+                // 200 is http status ok
+                if (httpURLConnection.getResponseCode() != 200) {
+                    throw new CustomException("Failed to upload code:" + httpURLConnection.getResponseCode() + " " + httpURLConnection.getResponseMessage());
+                }
+
+                // Obtain debugging information from server (different from response code)
+                inputStream = httpURLConnection.getInputStream();
+                result = this.convertStreamToString(inputStream);
 
                 // Flush buffer and close output
                 fileInputStream.close();
                 dataOutputStream.flush();
                 dataOutputStream.close();
 
-                // Read the response from the server
-                InputStream inputStream = httpURLConnection.getInputStream();
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
+//                // Read the response from the server
+//                InputStream inputStream = httpURLConnection.getInputStream();
+//                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
+//                return result;
 
                 // Catch error if unsuccessful
             } catch (MalformedURLException ex) {
@@ -199,9 +209,49 @@ public class BackgroundWorker extends AsyncTask<String,Void,String> { //generics
     @Override
     protected void onPostExecute(String result) {
         //super.onPostExecute(aVoid);
-        alertDialog.setMessage(result); //show result
+        String status;
+
+        switch (result) {
+            case "200": status = "SUCCESS";
+                break;
+
+            default: status = "FAIL";
+        }
+
+        alertDialog.setMessage(result + ": " + status); //show result
         alertDialog.show();             //show response of the server
     }
 
+    // User-defined custom exception
+    class CustomException extends Exception
+    {
+        public CustomException(String string)
+        {
+            // Call constructor of parent Exception
+            super(string);
+        }
+    }
 
+
+    // Convert an i/o stream into a string using string builder class
+    private String convertStreamToString(InputStream inputStream) {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+        StringBuilder stringBuilder = new StringBuilder();
+        String line = null;
+
+        try {
+            while ((line = bufferedReader.readLine()) != null) {
+                stringBuilder.append(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                inputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return stringBuilder.toString();
+    }
 }

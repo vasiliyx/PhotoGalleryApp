@@ -159,6 +159,9 @@ public class UploadPhotoActivity extends AppCompatActivity {
         BackgroundWorker backgroundWorker = new BackgroundWorker(this); // declare, instantiate, initialize
         backgroundWorker.execute(String.valueOf(numberOfImages), imageFileName, dataFileName, mPath);
 
+        BackgroundWorker backgroundWorker2 = new BackgroundWorker(this); // declare, instantiate, initialize
+        backgroundWorker2.execute(String.valueOf(numberOfImages), dataFileName, imageFileName, mPath);
+
     }
 
 

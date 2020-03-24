@@ -96,7 +96,7 @@ public class BackgroundWorker extends AsyncTask<String,Void,String> { //generics
                 httpURLConnection.setRequestMethod("POST");
                 httpURLConnection.setRequestProperty("Connection", "Keep-Alive");
                 httpURLConnection.setRequestProperty("ENCTYPE", "multipart/form-data");
-                httpURLConnection.setRequestProperty("User-Agent", "Android Multipart HTTP Client 1.0");
+//                httpURLConnection.setRequestProperty("User-Agent", "Android Multipart HTTP Client 1.0");
                 httpURLConnection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
                 httpURLConnection.setRequestProperty("uploaded_file", imageFileName);
 

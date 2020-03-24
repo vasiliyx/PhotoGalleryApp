@@ -153,15 +153,15 @@ public class UploadPhotoActivity extends AppCompatActivity {
         // Get storage path
         storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         myStoragePath = storageDir.getAbsolutePath();
-        String mPath = myStoragePath + "/" + imageFileName;
+        String imagePath = myStoragePath + "/" + imageFileName;
+        String dataPath = myStoragePath + "/" + dataFileName;
 
         // Allow background to obtain context and store information
         BackgroundWorker backgroundWorker = new BackgroundWorker(this); // declare, instantiate, initialize
-        backgroundWorker.execute(String.valueOf(numberOfImages), imageFileName, dataFileName, mPath);
+        backgroundWorker.execute(String.valueOf(numberOfImages), imageFileName, imagePath);
 
         BackgroundWorker backgroundWorker2 = new BackgroundWorker(this); // declare, instantiate, initialize
-        backgroundWorker2.execute(String.valueOf(numberOfImages), dataFileName, imageFileName, mPath);
-
+        backgroundWorker2.execute(String.valueOf(numberOfImages), dataFileName, dataPath);
     }
 
 

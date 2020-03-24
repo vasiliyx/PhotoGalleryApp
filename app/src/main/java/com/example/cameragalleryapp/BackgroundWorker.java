@@ -32,7 +32,7 @@ public class BackgroundWorker extends AsyncTask<String,Void,String> { //generics
     Context context;
     AlertDialog alertDialog;
 
-    // Pass context to constructor - needed because this is a seperate class
+    // Pass context to constructor - needed because this is a separate class
     public BackgroundWorker(Context ctx) {
         context = ctx;
     }
@@ -57,14 +57,10 @@ public class BackgroundWorker extends AsyncTask<String,Void,String> { //generics
     @Override
     protected String doInBackground(String... params) { //generics
         int numberOfImages = Integer.valueOf(params[0]);
-        String imageFileName = params[1];
-        String dataFileName = params[2];
-        String mPath = params[3]; //source file
-        //String login_url = "http://10.0.2.2/login.php";         //local host ip
-        String login_url = "http://24.84.210.161:8080/remote_login.php"; //server address URL
-        String serverUploadAddress = "http://10.0.2.2:8081/servletFileUploader/androidUpload";
-//        String serverUploadAddress = "http://10.0.2.2:8081/servletFileUploader/upload";
-//        String serverUploadAddress = "http://google.ca";
+        String fileName = params[1];
+        String mPath = params[2]; //source file
+        String serverUploadAddress = "http://10.0.2.2:8081/servletFileUploader/androidUpload"; //using emulator
+//        String serverUploadAddress = "http://192.168.1.71:8081/servletFileUploader/androidUpload"; //using phone
 
         int serverResponseCode = 0;
         HttpURLConnection httpURLConnection = null;
@@ -98,7 +94,7 @@ public class BackgroundWorker extends AsyncTask<String,Void,String> { //generics
                 httpURLConnection.setRequestProperty("ENCTYPE", "multipart/form-data");
 //                httpURLConnection.setRequestProperty("User-Agent", "Android Multipart HTTP Client 1.0");
                 httpURLConnection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
-                httpURLConnection.setRequestProperty("uploaded_file", imageFileName);
+                httpURLConnection.setRequestProperty("uploaded_file", fileName);
 
                 // Set output stream of httpURL connection to data type
                 dataOutputStream = new DataOutputStream(httpURLConnection.getOutputStream());
@@ -116,7 +112,7 @@ public class BackgroundWorker extends AsyncTask<String,Void,String> { //generics
                 // send image
                 dataOutputStream.writeBytes(twoHyphens + boundary + lineEnd);
                 dataOutputStream.writeBytes("Content-Disposition: form-data; name='uploaded_file';filename='"
-                        + imageFileName + "'" + lineEnd); //changed renameFile to imageFileName
+                        + fileName + "'" + lineEnd); //changed renameFile to fileName
 
                 dataOutputStream.writeBytes(lineEnd);
 

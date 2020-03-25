@@ -1,0 +1,7 @@
+0:0:0:0:0:0:0:1 - - [22/Mar/2020:22:27:21 -0700] "POST /servletFileUploader/upload HTTP/1.1" 500 126
+0:0:0:0:0:0:0:1 - - [22/Mar/2020:22:27:22 -0700] "GET /servletFileUploader/upload HTTP/1.1" 200 471
+0:0:0:0:0:0:0:1 - - [22/Mar/2020:22:29:27 -0700] "GET /servletFileUploader/androidUpload HTTP/1.1" 405 1116
+0:0:0:0:0:0:0:1 - - [22/Mar/2020:22:59:14 -0700] "GET /servletFileUploader/androidUpload HTTP/1.1" 405 1116
+0:0:0:0:0:0:0:1 - - [22/Mar/2020:23:14:06 -0700] "GET /servletFileUploader/upload HTTP/1.1" 200 471
+0:0:0:0:0:0:0:1 - - [22/Mar/2020:23:14:16 -0700] "GET /servletFileUploader/androidUpload HTTP/1.1" 405 1116
+127.0.0.1 - - [22/Mar/2020:23:46:10 -0700] "POST /servletFileUploader/androidUpload HTTP/1.1" 500 1456

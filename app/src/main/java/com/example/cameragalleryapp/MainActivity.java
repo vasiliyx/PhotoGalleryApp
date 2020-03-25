@@ -335,14 +335,6 @@ public class MainActivity extends AppCompatActivity {
                 .putExtra("location", myStoragePath));                   //as well as the location
     }
 
-//    // TODO implement this later when using gridview
-//    // Show all the images
-//    public void viewPhotoClick (View v) {
-//        Log.d("MainActivity","viewPhotoClick: called");
-//        Intent intent = new Intent(this, UploadPhotoActivity.class);
-//        startActivity(intent);
-//    }
-
 
     public void scrollPhotoLeftClick(View v) {
         Log.d("MainActivity","scrollPhotoLeftClick: called");

@@ -222,7 +222,7 @@ public class SearchActivity extends AppCompatActivity {
             topLeftLatRef = 85.0; //top left x
         }
         try {
-            topLeftLongRef = parseDouble(topLeftLongEditText.getText().toString());;
+            topLeftLongRef = parseDouble(topLeftLongEditText.getText().toString());
         }
         catch (Exception e) {
             topLeftLongRef = -180.0; //top left y

@@ -137,9 +137,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
 
     }
 
-
-    //todo this is where uploading to the cloud will happen, tristan only change this method
-    // Share image to the server
+    
     public void serverClick(View v) {
         Log.d("MainActivity", "serverClick: called");
 

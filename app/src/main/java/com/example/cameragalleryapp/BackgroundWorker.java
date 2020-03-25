@@ -59,8 +59,10 @@ public class BackgroundWorker extends AsyncTask<String,Void,String> { //generics
         int numberOfImages = Integer.valueOf(params[0]);
         String fileName = params[1];
         String mPath = params[2]; //source file
-        String serverUploadAddress = "http://10.0.2.2:8081/servletFileUploader/androidUpload"; //using emulator
-//        String serverUploadAddress = "http://192.168.1.71:8081/servletFileUploader/androidUpload"; //using phone
+        //String serverUploadAddress = "http://10.0.2.2:8081/servletFileUploader/androidUpload"; //using emulator
+        String serverUploadAddress = "http://10.0.2.2:8080/servletFileUploader/androidUpload";  // using Vasiliy's MacOS
+        //      String serverUploadAddress = "http://192.168.1.71:8081/servletFileUploader/androidUpload"; //using phone
+
 
         int serverResponseCode = 0;
         HttpURLConnection httpURLConnection = null;

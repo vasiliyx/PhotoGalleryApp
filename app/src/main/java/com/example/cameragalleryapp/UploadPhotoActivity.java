@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
+import org.json.JSONException;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -48,6 +49,8 @@ import android.widget.Toast;
 //import com.yai.app.support.DialogHandler;
 
 
+import com.example.cameragalleryapp.supportpackage.Pickle;
+
 import static com.example.cameragalleryapp.MainActivity.SHARE_PIC_REQUEST;
 import static com.example.cameragalleryapp.MainActivity.currentlyDisplayedImageIndex;
 import static com.example.cameragalleryapp.MainActivity.fileShortNameList;
@@ -57,12 +60,6 @@ import static com.example.cameragalleryapp.MainActivity.fileShortNameList;
 public class UploadPhotoActivity extends AppCompatActivity {
     private static final String TAG = "UploadPhotoActivity";
 
-    //UploadToServerTask task = new UploadToServerTask();
-    //task.execute(new String[] { "https://www.bcit.ca" }); //for http lab
-    //task.execute(new String[] { "http://10.0.2.2:8080/midp/hits" }); //for webapp lab using emulator
-    // task.execute(new String[] { "http://142.232.61.32:8080/PhotoGallery/hits" }); //for webapp lab using phone
-    private static final String serverUploadAddress = "http://10.0.2.2:8081/servletFileUploader/androidUpload";
-//^^server address
 
     static int tempIndex = 0;
     static int currentlyDisplayedImageIndex = 0; // Used for displaying the image from the list
@@ -138,28 +135,53 @@ public class UploadPhotoActivity extends AppCompatActivity {
     }
 
 
-    public void serverClick(View v) {
+    public void serverClick(View v) throws JSONException
+    {
         Log.d("MainActivity", "serverClick: called");
 
         // Get the total number of images form the list
         int numberOfImages = fileShortNameList.size();
 
+
         // Put string into proper format for the datatype
         String imageFileName = fileShortNameList.get(MainActivity.currentlyDisplayedImageIndex) + ".jpg"; //image
         String dataFileName = fileShortNameList.get(MainActivity.currentlyDisplayedImageIndex) + ".dat"; //image data - location, timestamp, keyword
+        String jsnFileName = fileShortNameList.get(MainActivity.currentlyDisplayedImageIndex) + ".jsn";
 
         // Get storage path
         storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         myStoragePath = storageDir.getAbsolutePath();
         String imagePath = myStoragePath + "/" + imageFileName;
         String dataPath = myStoragePath + "/" + dataFileName;
+        String jsnPath = myStoragePath + "/" + jsnFileName;
+
+
+        // Load the data object associated to the image
+        ImageData myImageData = null; // create an empty instance to hold the data
+        myImageData = (ImageData) Pickle.load(myImageData, dataPath);
+
+        // Obtain the data from the current '.dat' file
+        // Save it into the json structure
+        ImageDataJ myImageDataJ = new ImageDataJ();
+        myImageDataJ.caption = myImageData.caption;
+        myImageDataJ.locationStampLat = myImageData.locationStampLat;
+        myImageDataJ.locationStampLong = myImageData.locationStampLong;
+        myImageDataJ.timeStamp = myImageData.timeStamp;
+
+
+        // Save the Structure into the JSN file
+        JsonFile.save(myImageDataJ, storageDir + "/" + jsnFileName);
+        System.out.println("Saving JSN the object into storage");
+
+
+
 
         // Allow background to obtain context and store information
         BackgroundWorker backgroundWorker = new BackgroundWorker(this); // declare, instantiate, initialize
         backgroundWorker.execute(String.valueOf(numberOfImages), imageFileName, imagePath);
 
         BackgroundWorker backgroundWorker2 = new BackgroundWorker(this); // declare, instantiate, initialize
-        backgroundWorker2.execute(String.valueOf(numberOfImages), dataFileName, dataPath);
+        backgroundWorker2.execute(String.valueOf(numberOfImages), jsnFileName, jsnPath);
     }
 
 

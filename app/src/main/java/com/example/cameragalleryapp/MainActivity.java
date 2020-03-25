@@ -55,13 +55,12 @@ public class MainActivity extends AppCompatActivity {
     static String myCurrentCaptionPath; // this will be updated every time a new image is taken
     static String myStoragePath; // this will remain the same through the program
 
-    //todo change fileshortnamelist to private and create a workaround
     public static List<String> fileNameList  = new ArrayList<>(); // List of all the files in the directory (including the image and caption files)
     public static List<String> fileShortNameList = new ArrayList<>(); // List of all names of the image without the extension
 
     static File storageDir; // Working directory path
 
-    // GPS objects //todo fill details in here
+    // GPS objects
     LocationManager locationManager;
     LocationListener locationListener;
     Location myLocation;
@@ -71,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        // If permission is granted then attempting to use GPS //todo ask tej about how it exactly works
+        // If permission is granted then attempting to use GPS
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
@@ -287,14 +286,15 @@ public class MainActivity extends AppCompatActivity {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()); //set current time and date
         String locationStampLat, locationStampLong;
 
-        // When location is initially null, no location is assigned (search function will not find picture)
+        // When location is initially null will crash app if no location has loaded yet (it takes a few seconds)
         try{
             locationStampLat = String.valueOf(myLocation.getLatitude());
             locationStampLong = String.valueOf(myLocation.getLongitude());
         }
-        catch (Exception e){
-            locationStampLat = "";
-            locationStampLong = "";
+        //todo get last known location
+        catch (Exception e){ //Null pointer exception if location not found
+            locationStampLat = "49";
+            locationStampLong = "-123";
 
             Log.d("MainActivity", "createImageFile: location null");
         }

@@ -137,7 +137,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
 
     }
 
-    
+
     public void serverClick(View v) {
         Log.d("MainActivity", "serverClick: called");
 

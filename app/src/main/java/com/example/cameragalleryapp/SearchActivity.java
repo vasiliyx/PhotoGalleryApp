@@ -25,10 +25,10 @@ public class SearchActivity extends AppCompatActivity {
 
     //private EditText fromDate;
     //private EditText toDate;
-    private Calendar fromCalendar;
-    private Calendar toCalendar;
-    private DatePickerDialog.OnDateSetListener fromListener;
-    private DatePickerDialog.OnDateSetListener toListener;
+//    private Calendar fromCalendar;
+//    private Calendar toCalendar;
+//    private DatePickerDialog.OnDateSetListener fromListener;
+//    private DatePickerDialog.OnDateSetListener toListener;
 
 
     @Override

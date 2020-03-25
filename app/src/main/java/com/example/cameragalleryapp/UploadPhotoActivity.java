@@ -56,14 +56,6 @@ import static com.example.cameragalleryapp.MainActivity.fileShortNameList;
 // Uploads photos to social
 public class UploadPhotoActivity extends AppCompatActivity {
     private static final String TAG = "UploadPhotoActivity";
-
-    //UploadToServerTask task = new UploadToServerTask();
-    //task.execute(new String[] { "https://www.bcit.ca" }); //for http lab
-    //task.execute(new String[] { "http://10.0.2.2:8080/midp/hits" }); //for webapp lab using emulator
-    // task.execute(new String[] { "http://142.232.61.32:8080/PhotoGallery/hits" }); //for webapp lab using phone
-    private static final String serverUploadAddress = "http://10.0.2.2:8081/servletFileUploader/androidUpload";
-//^^server address
-
     static int tempIndex = 0;
     static int currentlyDisplayedImageIndex = 0; // Used for displaying the image from the list
     static String myStoragePath; // this will remain the same through the program
@@ -75,11 +67,8 @@ public class UploadPhotoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_upload);
         Log.d(TAG, "onCreate: called");
 
-
-
     }
 
-    // todo need to include the caption that comes with the image
     // Share image via intent to wake up social media app installed on device
     public void socialMediaClick(View v) {
         Log.d("MainActivity", "socialMediaClick: called");

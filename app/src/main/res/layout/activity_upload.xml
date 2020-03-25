@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".UploadPhotoActivity">
+
+    <TextView
+        android:id="@+id/socialMediaButtonTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:text="Upload to another app"
+        android:textColor="#444"
+        android:textSize="23sp" />
+
+    <Button
+        android:id="@+id/socialMediaButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/socialMediaButtonTextView"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/et_rounded_button"
+        android:text="@string/go"
+        android:textSize="24sp"
+        android:textColor="#FFF"
+        android:fontFamily="sans-serif-medium"
+        android:onClick="socialMediaClick"
+        android:textAllCaps="true"/>
+
+    <TextView
+        android:id="@+id/serverTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/socialMediaButton"
+        android:layout_marginTop="50dp"
+        android:text="Upload to the cloud"
+        android:textColor="#444"
+        android:textSize="23sp" />
+
+    <Button
+        android:id="@+id/serverButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/serverTextView"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/et_rounded_button"
+        android:text="@string/go"
+        android:textSize="24sp"
+        android:textColor="#FFF"
+        android:fontFamily="sans-serif-medium"
+        android:onClick="serverClick"
+        android:textAllCaps="true"/>
+
+</RelativeLayout>
